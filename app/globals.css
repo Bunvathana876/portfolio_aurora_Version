@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background-color: #0a0a0f;
+  color: #f8fafc;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0a0a0f;
+  color: #f8fafc;
+  overflow-x: hidden;
+  selection-background-color: rgba(56, 189, 248, 0.3);
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.28);
+  color: #ffffff;
+}
+
+/* Subtle grid pattern */
+.bg-grid-pattern {
+  background-size: 48px 48px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Native modal dialog scroll containment per modern-web-guidance */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(4, 4, 10, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.4);
+}
+
+/* Registered custom properties for smooth gradient rotation & reduced-motion per modern-web-guidance */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --animation-reduced {
+  syntax: "*";
+  inherits: false;
+  initial-value: none;
+}
+
+@keyframes rotate-border-angle {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+.featured-rotating-border {
+  --border-angle: 0deg;
+  background:
+    linear-gradient(#0c0d16, #0c0d16) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(168, 85, 247, 0.85) 28%,
+      rgba(34, 211, 238, 0.95) 52%,
+      rgba(59, 130, 246, 0.85) 74%,
+      rgba(255, 255, 255, 0.08) 100%
+    ) border-box;
+  border: 1.5px solid transparent;
+  animation: rotate-border-angle 5.5s linear infinite;
+}
+
+/* Native CSS Scrollspy per modern-web-guidance `scrollspy` guide */
+.scrollspy-nav {
+  scroll-target-group: auto;
+}
+
+.scrollspy-nav a:is(:target-current, .\:target-current) {
+  color: #ffffff;
+  background-color: rgba(34, 211, 238, 0.1);
+  box-shadow: inset 0 -2px 0 0 #22d3ee, 0 0 16px rgba(34, 211, 238, 0.18);
+  font-weight: 600;
+}
+
+/* Specular micro-interaction sheen on buttons and interactive pills */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-sheen::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  transform: translateX(-130%) skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-sheen:hover::after,
+.btn-sheen:focus-visible::after {
+  transform: translateX(130%) skewX(-18deg);
+}
+
+/* View Transition smoothing between sections */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 360ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: var(--animation-reduced) !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
