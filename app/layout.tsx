@@ -1,24 +1,21 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { siteData } from "@/data/site";
-import { SmoothScrollProvider } from "@/components/ui/SmoothScrollProvider";
-import { CustomCursor } from "@/components/ui/CustomCursor";
-import { ScrollProgress } from "@/components/ui/ScrollProgress";
-import { IntroLoader } from "@/components/ui/IntroLoader";
 import { Navbar } from "@/components/ui/Navbar";
 import { CommandPalette } from "@/components/ui/CommandPalette";
-import { SectionTransitionOverlay } from "@/components/ui/SectionTransition";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans",
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-space",
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -49,11 +46,20 @@ export const metadata: Metadata = {
     title: `${siteData.name} — ${siteData.role}`,
     description: siteData.tagline,
     siteName: `${siteData.name} Portfolio`,
+    images: [
+      {
+        url: siteData.avatar,
+        width: 1824,
+        height: 2346,
+        alt: siteData.name,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteData.name} — ${siteData.role}`,
     description: siteData.tagline,
+    images: [siteData.avatar],
   },
   robots: {
     index: true,
@@ -69,31 +75,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} dark`}
+      suppressHydrationWarning
+      className={`${inter.variable} ${instrumentSerif.variable}`}
     >
-      <body className="font-sans bg-[#0a0a0f] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-white">
-        {/* Faint Grid Background & Subtle Noise Overlay */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-100"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+      <head>
+        <meta name="color-scheme" content="light dark" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var s=localStorage.getItem("color-scheme");var m=document.querySelector('meta[name="color-scheme"]');if(m){m.content=s||"light dark";}if(s==="dark"){document.documentElement.classList.add("dark");document.documentElement.classList.remove("light");}else if(s==="light"){document.documentElement.classList.add("light");document.documentElement.classList.remove("dark");}}catch(e){}`,
           }}
         />
-
-        <SmoothScrollProvider>
-          <IntroLoader />
-          <ScrollProgress />
-          <SectionTransitionOverlay />
-          <CustomCursor />
-          <Navbar />
-          <CommandPalette />
-          <div className="relative z-10">{children}</div>
-        </SmoothScrollProvider>
+      </head>
+      <body className="font-sans bg-background text-foreground antialiased">
+        <Navbar />
+        <CommandPalette />
+        <div className="relative">{children}</div>
       </body>
     </html>
   );

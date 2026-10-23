@@ -1,165 +1,124 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import {
-  Smartphone,
-  Layout,
-  Server,
-  Database,
-  Wrench,
-  Sparkles,
-} from "lucide-react";
-import { siteData, type SkillCategory } from "@/data/site";
-import { SpotlightCard } from "@/components/ui/SpotlightCard";
-
-function getCategoryIcon(category: string) {
-  switch (category.toLowerCase()) {
-    case "mobile":
-      return <Smartphone className="h-5 w-5 text-cyan-400 transition-transform duration-300 group-hover:scale-110" />;
-    case "frontend":
-      return <Layout className="h-5 w-5 text-purple-400 transition-transform duration-300 group-hover:scale-110" />;
-    case "backend":
-      return <Server className="h-5 w-5 text-blue-400 transition-transform duration-300 group-hover:scale-110" />;
-    case "database & orm":
-      return <Database className="h-5 w-5 text-emerald-400 transition-transform duration-300 group-hover:scale-110" />;
-    default:
-      return <Wrench className="h-5 w-5 text-amber-400 transition-transform duration-300 group-hover:rotate-12" />;
-  }
-}
-
-function getAccentClasses(accent: SkillCategory["accent"]) {
-  switch (accent) {
-    case "cyan":
-      return "hover:border-cyan-400/40 from-cyan-500/15 via-transparent to-transparent";
-    case "purple":
-      return "hover:border-purple-400/40 from-purple-500/15 via-transparent to-transparent";
-    case "blue":
-      return "hover:border-blue-400/40 from-blue-500/15 via-transparent to-transparent";
-    case "emerald":
-      return "hover:border-emerald-400/40 from-emerald-500/15 via-transparent to-transparent";
-    case "amber":
-      return "hover:border-amber-400/40 from-amber-500/15 via-transparent to-transparent";
-  }
-}
+import { Check, Globe, Layers, Sparkles } from "lucide-react";
+import { siteData } from "@/data/site";
+import { FadeIn } from "@/components/ui/SectionTransition";
 
 export function Skills() {
-  const allSkills = siteData.skillCategories.flatMap((cat) =>
-    cat.skills.map((skill) => ({
-      name: skill,
-      category: cat.category,
-    }))
-  );
-
-  const marqueeItems = [...allSkills, ...allSkills];
-
   return (
     <section
       id="skills"
-      className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
+      className="mx-auto max-w-[1320px] px-6 py-20 sm:px-10 sm:py-28 lg:px-16 lg:py-32"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
-      >
-        <p className="font-mono text-xs uppercase tracking-[0.25em] text-cyan-400 mb-3">
-          02 / Technical Arsenal
+      {/* Section Header */}
+      <FadeIn className="mb-12 sm:mb-16">
+        <p className="editorial-label mb-3">02 / Capabilities</p>
+        <h2 className="font-serif project-title-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.04] tracking-[-0.025em] text-foreground">
+          Technical &amp; Core <em className="italic">competencies.</em>
+        </h2>
+        <p className="editorial-prose text-muted mt-4 max-w-2xl">
+          A verified breakdown of cross-platform mobile engineering, modern web architectures,
+          relational databases, professional workflow traits, and spoken languages.
         </p>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <h2 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-white">
-            Full-stack &amp; mobile{" "}
-            <span className="bg-gradient-to-r from-purple-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent">
-              capabilities.
-            </span>
-          </h2>
-          <p className="text-sm text-slate-400 max-w-md">
-            From Flutter mobile apps with offline catalog state to Python/Next.js backends and relational databases.
-          </p>
-        </div>
-      </motion.div>
+      </FadeIn>
 
-      {/* Infinite Scrolling Marquee */}
-      <div className="relative mb-14 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] py-4 backdrop-blur-xl">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[#0a0a0f] to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[#0a0a0f] to-transparent"
-        />
-
-        <div className="flex w-max animate-marquee gap-4 hover:[animation-play-state:paused]">
-          {marqueeItems.map((item, index) => (
-            <div
-              key={`${item.name}-${index}`}
-              className="group/chip flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/45 hover:bg-white/[0.08] hover:text-white"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-cyan-400 transition-transform duration-200 group-hover/chip:rotate-12 group-hover/chip:scale-110" />
-              <span>{item.name}</span>
-              <span className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-slate-400 group-hover/chip:text-cyan-200 transition-colors">
-                {item.category}
+      {/* 4 Technical Columns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 sm:gap-y-12 border-t border-neutral-200 dark:border-neutral-800 pt-8 sm:pt-10">
+        {siteData.skills.map((column, idx) => (
+          <FadeIn key={column.heading} delay={idx * 0.05}>
+            <div className="flex items-center justify-between pb-3 mb-5 border-b border-neutral-200 dark:border-neutral-800">
+              <h3 className="text-xs uppercase tracking-widest text-muted">
+                {column.heading}
+              </h3>
+              <span className="font-mono text-[10px] text-muted/70">
+                0{idx + 1}
               </span>
             </div>
-          ))}
-        </div>
+            <ul className="space-y-3">
+              {column.items.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-baseline gap-2.5 text-sm sm:text-base text-foreground/90 leading-relaxed"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 rounded-full bg-accent/70 shrink-0 self-center"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
+        ))}
       </div>
 
-      {/* Bento Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
-        {siteData.skillCategories.map((group, idx) => {
-          const spanClass = idx < 2 ? "md:col-span-3" : "md:col-span-2";
-
-          return (
-            <motion.div
-              key={group.category}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className={spanClass}
-            >
-              <SpotlightCard
-                className={`h-full bg-gradient-to-br ${getAccentClasses(
-                  group.accent
-                )} p-6 sm:p-7`}
+      {/* Secondary Skills Block: Core Skills, Personal Traits & Spoken Languages */}
+      <div className="mt-16 sm:mt-20 pt-10 sm:pt-12 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+        {/* Core Professional Skills (5 cols) */}
+        <FadeIn delay={0.15} className="md:col-span-5 lg:col-span-5 space-y-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+            <Layers className="w-3.5 h-3.5 text-accent" />
+            <h3 className="text-xs uppercase tracking-widest text-foreground font-medium">
+              Core Skills
+            </h3>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {siteData.coreSkills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 bg-surface/70 text-xs font-mono text-foreground"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] transition-colors group-hover:border-white/25">
-                      {getCategoryIcon(group.category)}
-                    </div>
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-white group-hover:text-cyan-100 transition-colors">
-                      {group.category}
-                    </h3>
-                  </div>
-                  <span className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-0.5 font-mono text-xs text-slate-400 group-hover:border-cyan-400/30 group-hover:text-cyan-200 transition-colors">
-                    {group.skills.length} tools
-                  </span>
-                </div>
+                <span className="text-accent">&rsaquo;</span>
+                <span>{skill}</span>
+              </span>
+            ))}
+          </div>
+        </FadeIn>
 
-                <p className="text-xs sm:text-sm text-slate-400 mb-6 leading-relaxed">
-                  {group.description}
-                </p>
+        {/* Personal Traits (4 cols) */}
+        <FadeIn delay={0.2} className="md:col-span-4 lg:col-span-4 space-y-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <h3 className="text-xs uppercase tracking-widest text-foreground font-medium">
+              Personal Traits
+            </h3>
+          </div>
+          <ul className="space-y-2.5">
+            {siteData.personalTraits.map((trait) => (
+              <li
+                key={trait}
+                className="flex items-center gap-2 text-xs sm:text-sm text-foreground/90 font-mono"
+              >
+                <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                <span>{trait}</span>
+              </li>
+            ))}
+          </ul>
+        </FadeIn>
 
-                <div className="flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#0a0a0f]/70 px-3.5 py-1.5 text-xs sm:text-sm font-medium text-slate-100 transition-all duration-200 group-hover:border-white/20 hover:-translate-y-0.5 hover:!border-cyan-400/55 hover:bg-cyan-500/10 hover:text-cyan-200"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-cyan-400/60" />
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </SpotlightCard>
-            </motion.div>
-          );
-        })}
+        {/* Spoken Languages (3 cols) */}
+        <FadeIn delay={0.25} className="md:col-span-3 lg:col-span-3 space-y-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+            <Globe className="w-3.5 h-3.5 text-accent" />
+            <h3 className="text-xs uppercase tracking-widest text-foreground font-medium">
+              Languages
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {siteData.languages.map((lang) => (
+              <div
+                key={lang.language}
+                className="flex items-center justify-between p-3 rounded-sm border border-neutral-200 dark:border-neutral-800 bg-surface/40"
+              >
+                <span className="text-sm font-medium text-foreground">
+                  {lang.language}
+                </span>
+                <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-foreground/10 text-foreground">
+                  {lang.proficiency}
+                </span>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
       </div>
     </section>
   );

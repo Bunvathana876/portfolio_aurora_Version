@@ -1,171 +1,128 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  Code2,
-  GraduationCap,
-  MapPin,
-  Sparkles,
-  TerminalSquare,
-} from "lucide-react";
+import React, { useState } from "react";
+import Image from "next/image";
 import { siteData } from "@/data/site";
-import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { FadeIn } from "@/components/ui/SectionTransition";
 
 export function About() {
+  const [portraitLoaded, setPortraitLoaded] = useState(false);
+  const [portraitFailed, setPortraitFailed] = useState(false);
+
   return (
     <section
       id="about"
-      className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
+      className="mx-auto max-w-[1320px] px-6 py-20 sm:px-10 sm:py-28 lg:px-16 lg:py-32"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-14"
-      >
-        <p className="font-mono text-xs uppercase tracking-[0.25em] text-cyan-400 mb-3">
-          01 / About Me
-        </p>
-        <h2 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-white">
-          Engineering across{" "}
-          <span className="bg-gradient-to-r from-purple-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent">
-            mobile &amp; full-stack web.
-          </span>
-        </h2>
-      </motion.div>
+      <FadeIn className="mb-12 sm:mb-16">
+        <p className="editorial-label">01 / About</p>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        {/* Glowing Portrait / Avatar Frame */}
-        <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="lg:col-span-5 flex justify-center"
-        >
-          <div className="relative group w-full max-w-sm">
-            {/* Animated Aurora Glow Frame */}
-            <div
-              aria-hidden="true"
-              className="-inset-1 absolute rounded-3xl bg-gradient-to-tr from-purple-600 via-cyan-400 to-blue-600 opacity-50 blur-xl transition duration-500 group-hover:opacity-80"
-            />
-            <SpotlightCard className="border-white/15 bg-[#0e101a]/90 p-6 shadow-2xl">
-              {/* Futuristic Visual Portrait Placeholder */}
-              <div className="relative aspect-[4/4.3] w-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#131629] via-[#0b0d17] to-[#191233] flex flex-col items-center justify-center p-6 text-center transition-colors duration-300 group-hover:border-cyan-400/30">
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-grid-pattern opacity-40"
-                />
-                <div
-                  aria-hidden="true"
-                  className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-cyan-500/20 blur-2xl transition-transform duration-500 group-hover:scale-125"
-                />
-                <div
-                  aria-hidden="true"
-                  className="absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-purple-500/25 blur-2xl transition-transform duration-500 group-hover:scale-125"
-                />
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-x-12 items-start">
+        {/* Left Column: Large Pull-Quote in Italic Serif & Education Highlight */}
+        <FadeIn className="md:col-span-6 lg:col-span-6 space-y-8">
+          <blockquote className="font-serif italic text-2xl sm:text-3xl lg:text-[2.65rem] leading-[1.2] tracking-[-0.02em] text-foreground">
+            &ldquo;Passionate about writing clean, maintainable code, designing responsive interfaces, and collaborating effectively within engineering teams.&rdquo;
+          </blockquote>
 
-                {/* Monogram Badge */}
-                <div className="relative mb-4 flex h-24 w-24 items-center justify-center rounded-3xl border border-cyan-400/30 bg-white/[0.04] shadow-[0_0_30px_rgba(34,211,238,0.2)] transition-transform duration-300 group-hover:scale-105 group-hover:border-cyan-400/55">
-                  <span className="font-display text-4xl font-bold bg-gradient-to-br from-white via-cyan-200 to-purple-300 bg-clip-text text-transparent">
-                    {siteData.initials}
-                  </span>
-                </div>
-
-                <h3 className="relative font-display text-xl font-bold text-white group-hover:text-cyan-100 transition-colors">
-                  {siteData.name}
-                </h3>
-                <p className="relative mt-1 text-xs font-medium text-cyan-300">
-                  {siteData.role}
-                </p>
-
-                <div className="relative mt-5 flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3.5 py-1.5 text-[11px] text-slate-300 transition-colors group-hover:border-cyan-400/30">
-                  <MapPin className="h-3.5 w-3.5 text-cyan-400" />
-                  <span>{siteData.socials.location}</span>
-                </div>
-              </div>
-
-              {/* Terminal status bar */}
-              <div className="mt-4 flex items-center justify-between text-xs font-mono text-slate-400 px-1">
-                <span className="flex items-center gap-1.5 text-emerald-400">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  status: building
-                </span>
-                <span>Norton Univ. • Y4</span>
-              </div>
-            </SpotlightCard>
-          </div>
-        </motion.div>
-
-        {/* Bio & Stats Grid */}
-        <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="lg:col-span-7 space-y-8"
-        >
-          <SpotlightCard className="p-6 sm:p-8 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-purple-300 mb-4">
-              <TerminalSquare className="h-4 w-4 text-cyan-400 transition-transform duration-300 group-hover:rotate-6" />
-              <span>Biography &amp; Focus</span>
+          {/* Education Box */}
+          <div className="p-6 border border-neutral-200 dark:border-neutral-800 bg-surface/40 space-y-2">
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-accent">
+              <span>Education</span>
+              <span>{siteData.education.period}</span>
             </div>
-            <p className="text-base sm:text-lg text-slate-200 leading-relaxed">
-              {siteData.bio}
+            <h3 className="font-serif text-xl sm:text-2xl text-foreground font-normal">
+              {siteData.education.degree}
+            </h3>
+            <p className="text-xs sm:text-sm text-muted">
+              {siteData.education.institution} &mdash; {siteData.education.location}
             </p>
-
-            <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-300">
-              <div className="group/edu flex items-start gap-3 rounded-2xl border border-transparent p-2.5 transition-all hover:border-white/10 hover:bg-white/[0.03]">
-                <GraduationCap className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5 transition-transform duration-200 group-hover/edu:scale-110" />
-                <div>
-                  <p className="font-semibold text-white">Education</p>
-                  <p className="text-slate-400">
-                    B.Sc. CS &amp; Software Engineering (Year 4), Norton University
-                  </p>
-                </div>
-              </div>
-              <div className="group/spec flex items-start gap-3 rounded-2xl border border-transparent p-2.5 transition-all hover:border-white/10 hover:bg-white/[0.03]">
-                <Code2 className="h-5 w-5 text-purple-400 shrink-0 mt-0.5 transition-transform duration-200 group-hover/spec:scale-110" />
-                <div>
-                  <p className="font-semibold text-white">Core Specialties</p>
-                  <p className="text-slate-400">
-                    Flutter/Dart, Next.js, TypeScript, FastAPI/Flask &amp; PostgreSQL
-                  </p>
-                </div>
-              </div>
-            </div>
-          </SpotlightCard>
-
-          {/* Fun / Key Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {siteData.stats.map((stat, idx) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.1 * idx }}
-              >
-                <SpotlightCard className="h-full rounded-2xl p-4">
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-cyan-200 to-purple-300 bg-clip-text text-transparent">
-                      {stat.value}
-                    </span>
-                    <Sparkles className="h-3.5 w-3.5 text-cyan-400/60 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110 group-hover:text-cyan-300" />
-                  </div>
-                  <p className="mt-1.5 text-xs font-semibold text-slate-200 group-hover:text-white transition-colors">
-                    {stat.label}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-slate-400 leading-snug">
-                    {stat.detail}
-                  </p>
-                </SpotlightCard>
-              </motion.div>
-            ))}
           </div>
-        </motion.div>
+        </FadeIn>
+
+        {/* Right Column: Small Body Text Bio + Portrait Plate */}
+        <div className="md:col-span-6 lg:col-span-5 lg:col-start-8 space-y-10">
+          <FadeIn delay={0.08} className="space-y-4 text-sm leading-relaxed text-foreground/90">
+            <p>{siteData.bio}</p>
+            <p className="text-muted">
+              Based in {siteData.socials.location}, I specialize in building cross-platform
+              mobile applications with Flutter and full-stack web applications using React,
+              Next.js, and FastAPI. {siteData.availability}.
+            </p>
+          </FadeIn>
+
+          {/* Portrait with Thin 1px Border & Editorial Caption */}
+          <FadeIn as="figure" delay={0.14} className="max-w-sm">
+            <div className="relative aspect-[4/5] w-full overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-surface">
+              {/* Minimalist Editorial Workspace & Portrait Illustration Fallback */}
+              <div className="absolute inset-0 flex flex-col justify-between p-6 text-foreground">
+                <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-muted">
+                  <span>Phnom Penh</span>
+                  <span>UTC+7</span>
+                </div>
+
+                <svg
+                  viewBox="0 0 240 260"
+                  className="w-4/5 h-auto mx-auto stroke-current text-foreground/75"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <circle cx="120" cy="72" r="24" strokeWidth="1" />
+                  <path
+                    d="M76 168 C76 130, 164 130, 164 168"
+                    strokeWidth="1"
+                  />
+                  <rect
+                    x="82"
+                    y="152"
+                    width="76"
+                    height="48"
+                    stroke="var(--fg)"
+                    strokeWidth="1"
+                    fill="var(--bg)"
+                  />
+                  <circle cx="120" cy="176" r="2.5" fill="var(--accent)" />
+                  <line
+                    x1="32"
+                    y1="200"
+                    x2="208"
+                    y2="200"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  />
+                </svg>
+
+                <div className="flex items-center justify-between border-t border-neutral-200 dark:border-neutral-800 pt-2.5 text-[10px] font-mono uppercase tracking-widest text-muted">
+                  <span>{siteData.name}</span>
+                  <span>Portrait Plate</span>
+                </div>
+              </div>
+
+              {!portraitFailed && (
+                <Image
+                  src={siteData.avatar || "/images/portrait.jpg"}
+                  alt={siteData.name}
+                  fill
+                  priority
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 384px"
+                  onLoad={() => setPortraitLoaded(true)}
+                  onError={() => setPortraitFailed(true)}
+                  className={`object-cover transition-opacity duration-500 ${
+                    portraitLoaded
+                      ? "opacity-100"
+                      : "opacity-0 pointer-events-none"
+                  }`}
+                />
+              )}
+            </div>
+
+            <figcaption className="mt-2.5 font-mono text-xs text-muted flex items-center justify-between">
+              <span>Fig. 1: {siteData.name} &mdash; Studio Portrait.</span>
+              <span>B.S. 2026</span>
+            </figcaption>
+          </FadeIn>
+        </div>
       </div>
     </section>
   );

@@ -13,16 +13,17 @@ export default function Icon() {
       <div
         style={{
           fontSize: 15,
-          background: "linear-gradient(135deg, #0a0a0f 0%, #1e1b4b 50%, #06b6d4 100%)",
+          background: "#F5F2EC",
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "white",
-          fontWeight: 800,
-          borderRadius: 8,
-          border: "1px solid rgba(34, 211, 238, 0.5)",
+          color: "#111111",
+          fontWeight: 600,
+          borderRadius: 2,
+          border: "1px solid #D9D5CC",
+          fontFamily: "Georgia, serif",
         }}
       >
         {siteData.initials}

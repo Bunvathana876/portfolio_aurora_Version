@@ -1,28 +1,37 @@
 export interface SocialLinks {
   email: string;
+  phone: string;
   location: string;
+  address: string;
   github: string;
   linkedin: string;
+  dateOfBirth?: string;
 }
 
-export interface SkillItem {
-  name: string;
-  level?: string;
+export interface LanguageItem {
+  language: string;
+  proficiency: string;
 }
 
-export interface SkillCategory {
-  category: string;
-  description: string;
-  accent: "purple" | "cyan" | "blue" | "emerald" | "amber";
-  skills: string[];
+export interface SkillColumn {
+  heading: string;
+  items: string[];
 }
 
 export interface Project {
   id: string;
+  slug: string;
   title: string;
   subtitle?: string;
+  category: string;
+  year: string;
+  role: string;
   description: string;
+  overview: string;
+  highlights?: string[];
   tags: string[];
+  techStack: string[];
+  image: string;
   liveUrl: string;
   githubUrl: string;
   featured?: boolean;
@@ -40,33 +49,25 @@ export interface TimelineItem {
   type: "education" | "engineering" | "project";
 }
 
-export interface StatItem {
-  label: string;
-  value: string;
-  detail: string;
-}
-
-export interface LiveStatusItem {
-  id: "available" | "working" | "listening";
-  category: string;
-  label: string;
-  sublabel: string;
-  accent: "emerald" | "cyan" | "purple";
-  href?: string;
-}
-
 export interface SiteConfig {
   name: string;
   initials: string;
   role: string;
-  roles: string[];
   tagline: string;
   bio: string;
+  avatar: string;
   availability: string;
-  liveStatus: LiveStatusItem[];
   siteUrl: string;
-  stats: StatItem[];
-  skillCategories: SkillCategory[];
+  education: {
+    degree: string;
+    period: string;
+    institution: string;
+    location: string;
+  };
+  skills: SkillColumn[];
+  coreSkills: string[];
+  personalTraits: string[];
+  languages: LanguageItem[];
   projects: Project[];
   timeline: TimelineItem[];
   socials: SocialLinks;
@@ -75,182 +76,292 @@ export interface SiteConfig {
 export const siteData: SiteConfig = {
   name: "Bun Vathana",
   initials: "BV",
-  role: "Full-Stack & Cross-Platform Mobile Developer",
-  roles: [
-    "Full-Stack & Cross-Platform Mobile Developer",
-    "Flutter & Dart Mobile Engineer",
-    "Next.js & TypeScript Architect",
-    "Python (FastAPI & Flask) Backend Builder",
-  ],
-  tagline: "Building fast, intuitive mobile apps and scalable full-stack web systems.",
-  bio: "I'm a fourth-year Computer Science and Software Engineering student at Norton University in Phnom Penh. I specialize in crafting cross-platform mobile experiences with Flutter and engineering full-stack web applications using Next.js, TypeScript, Python (FastAPI/Flask), and PostgreSQL.",
-  availability: "Available for Full-Stack & Mobile Engineering Opportunities",
-  liveStatus: [
-    {
-      id: "available",
-      category: "Available for work",
-      label: "Open for Full-Stack & Mobile Roles",
-      sublabel: "Phnom Penh (UTC+7) • Remote or On-site",
-      accent: "emerald",
-      href: "#contact",
-    },
-    {
-      id: "working",
-      category: "Currently working on",
-      label: "ShopPanda Commerce & Offline Sync Engine",
-      sublabel: "Flutter • Next.js • FastAPI • PostgreSQL",
-      accent: "cyan",
-      href: "#projects",
-    },
-    {
-      id: "listening",
-      category: "Listening to",
-      label: "Midnight City — M83",
-      sublabel: "Synthwave Focus • Late-Night Build Session",
-      accent: "purple",
-    },
-  ],
+  role: "Software Developer · Mobile & Full-Stack Web",
+  tagline: "Building cross-platform mobile applications with Flutter and full-stack web applications with Next.js, React, and FastAPI.",
+  bio: "Motivated Software Developer and senior student pursuing a Bachelor of Science in Software Development at Norton University. Experienced in building cross-platform mobile applications with Flutter and full-stack web applications using React, Next.js, and FastAPI. Passionate about writing clean, maintainable code, designing responsive interfaces, and collaborating effectively within engineering teams.",
+  avatar: "/images/portrait.jpg",
+  availability: "Available for Mobile & Full-Stack Engineering Opportunities",
   siteUrl: "https://bunvathana.dev",
-  stats: [
+  education: {
+    degree: "Bachelor of Science in Software Development",
+    period: "2023 — 2026",
+    institution: "Norton University",
+    location: "Phnom Penh, Cambodia",
+  },
+  skills: [
     {
-      label: "Academic Standing",
-      value: "Year 4",
-      detail: "CS & Software Engineering @ Norton University",
+      heading: "Mobile Development",
+      items: [
+        "Flutter",
+        "Dart",
+        "Cross-Platform UI",
+        "State Management",
+        "Offline-First SQLite",
+      ],
     },
     {
-      label: "Core Stack",
-      value: "16+",
-      detail: "Production frameworks, databases & dev tools",
+      heading: "Frontend Web",
+      items: [
+        "React.js",
+        "Next.js",
+        "JavaScript (ES6+)",
+        "HTML5 & CSS3",
+        "Tailwind CSS",
+      ],
     },
     {
-      label: "Flagship Systems",
-      value: "3+",
-      detail: "End-to-end mobile, web & AI expert systems shipped",
+      heading: "Backend & APIs",
+      items: [
+        "Python",
+        "FastAPI",
+        "Node.js",
+        "RESTful API Design",
+      ],
     },
     {
-      label: "Base Location",
-      value: "PNH",
-      detail: "Phnom Penh, Cambodia (UTC+7)",
+      heading: "Databases & DevOps",
+      items: [
+        "PostgreSQL",
+        "SQLite",
+        "MySQL",
+        "Relational Schema Design",
+        "Docker & Docker Compose",
+        "Git & GitHub",
+        "Postman & Linux CLI",
+      ],
     },
   ],
-  skillCategories: [
+  coreSkills: [
+    "Adaptable & Fast Learner",
+    "Creative Problem-Solving",
+    "Team Collaboration",
+    "Clean Code Architecture",
+    "Time Management",
+    "Diligent & Hardworking",
+  ],
+  personalTraits: [
+    "Creative Problem-Solving",
+    "Diligent, Honest & Reliable",
+    "Collaborative Team Player",
+    "Clean Code & Fast Learner",
+  ],
+  languages: [
     {
-      category: "Mobile",
-      description: "Cross-platform native-feel apps with offline-first state & smooth 60fps UI.",
-      accent: "cyan",
-      skills: ["Flutter", "Dart"],
+      language: "Khmer",
+      proficiency: "Native",
     },
     {
-      category: "Frontend",
-      description: "Reactive, accessible, and high-performance web interfaces with modern styling.",
-      accent: "purple",
-      skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-    },
-    {
-      category: "Backend",
-      description: "Scalable RESTful APIs, microservices, and rule-based inference backends.",
-      accent: "blue",
-      skills: ["Python", "FastAPI", "Flask", "Node.js", "Express"],
-    },
-    {
-      category: "Database & ORM",
-      description: "Relational data modeling, type-safe queries, and embedded local persistence.",
-      accent: "emerald",
-      skills: ["PostgreSQL", "MySQL", "SQLite", "Prisma ORM"],
-    },
-    {
-      category: "Tools & Design",
-      description: "Containerized deployments, version control workflows, and UI/UX prototyping.",
-      accent: "amber",
-      skills: ["Docker", "Git", "Figma"],
+      language: "English",
+      proficiency: "Intermediate",
     },
   ],
   projects: [
     {
-      id: "shop-panda",
-      title: "ShopPanda (Supermarket E-Commerce Platform)",
-      subtitle: "Cross-Platform Mobile & Next.js Admin Ecosystem",
+      id: "sunflower-expert-system",
+      slug: "sunflower-expert-system",
+      title: "Sunflower Disease Diagnostic Expert System",
+      subtitle: "Bilingual Agricultural Rule-Based Diagnostic Engine",
+      category: "AI & Diagnostic Systems",
+      year: "2025",
+      role: "Lead Developer",
       description:
-        "A cross-platform Flutter mobile shopping app featuring offline catalog state management and dark mode, paired with a Next.js admin dashboard.",
-      tags: ["Flutter", "Dart", "Next.js", "Offline State", "Dark Mode"],
+        "Engineered expert diagnosis engine that evaluates sunflower leaf symptoms to identify plant diseases and prescribe structured treatment plans in Khmer and English.",
+      overview:
+        "The Sunflower Disease Diagnostic Expert System bridges agricultural phytopathology knowledge and practical software for Cambodian farmers and agronomists. Using a deterministic rule-based inference engine powered by Python, FastAPI, and PostgreSQL, the platform evaluates observed sunflower leaf symptoms in both English and Khmer to deliver accurate disease diagnoses and structured treatment protocols in real time.",
+      highlights: [
+        "Engineered expert diagnosis engine that evaluates sunflower leaf symptoms to identify plant diseases and prescribe structured treatment plans.",
+        "Designed bilingual database schema in PostgreSQL supporting dynamic symptom data and remedies in Khmer and English.",
+        "Connected responsive React client to FastAPI REST endpoints for real-time analysis turnaround.",
+      ],
+      tags: ["Python", "FastAPI", "PostgreSQL", "React", "Khmer & English"],
+      techStack: [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "React.js",
+        "Tailwind CSS",
+        "RESTful APIs",
+      ],
+      image: "/images/projects/sunflower-expert-system.jpg",
       liveUrl: "#",
-      githubUrl: "https://github.com/YOUR_GITHUB/shop-panda",
+      githubUrl: "https://github.com/Bunvathana876",
       featured: true,
-      metrics: "Flutter App + Next.js Admin",
+      metrics: "Bilingual EN/KM Rule Engine",
+      accentColor: "from-amber-500/20 via-yellow-500/10 to-emerald-500/20",
+    },
+    {
+      id: "full-stack-ecommerce",
+      slug: "dual-client-ecommerce",
+      title: "Full-Stack Dual-Client E-Commerce Platform",
+      subtitle: "Cross-Platform Flutter Mobile & Next.js Admin Ecosystem",
+      category: "Mobile & E-Commerce",
+      year: "2026",
+      role: "Full-Stack & Mobile Developer",
+      description:
+        "A dual-client retail system with a cross-platform Flutter consumer mobile app and a Next.js administrative inventory dashboard containerized with Docker Compose.",
+      overview:
+        "A modern, end-to-end supermarket retail ecosystem. The cross-platform Flutter mobile client features smooth catalog browsing, client-side shopping cart state management, and streamlined checkout. Store administrators manage inventory, product catalogs, and customer order fulfillment queues through a responsive Next.js web portal, backed by containerized FastAPI and PostgreSQL services.",
+      highlights: [
+        "Built cross-platform shopping app in Flutter with smooth catalog browsing, client cart state, and order workflows.",
+        "Developed administrative dashboard using Next.js for managing product inventory and tracking customer fulfillment.",
+        "Containerized backend services and database with Docker Compose for consistent local testing and deployments.",
+      ],
+      tags: ["Flutter", "Next.js", "FastAPI", "PostgreSQL", "Docker Compose"],
+      techStack: [
+        "Flutter",
+        "Dart",
+        "Next.js",
+        "TypeScript",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker Compose",
+      ],
+      image: "/images/projects/shop-panda.jpg",
+      liveUrl: "#",
+      githubUrl: "https://github.com/Bunvathana876",
+      featured: true,
+      metrics: "Flutter Mobile + Next.js Admin",
       accentColor: "from-cyan-500/20 via-blue-500/10 to-purple-500/20",
     },
     {
-      id: "smart-diagnostic-platform",
-      title: "Smart Diagnostic & Service Management Platform",
-      subtitle: "Full-Stack IT Helpdesk & Ticketing System",
+      id: "daily-flow",
+      slug: "daily-flow",
+      title: "Daily Flow — Habit & Routine Tracker",
+      subtitle: "Offline-First Mobile Habit & Task Logging Application",
+      category: "Mobile Application",
+      year: "2025",
+      role: "Mobile Developer",
       description:
-        "A full-stack IT helpdesk and ticketing web application built with Next.js, TypeScript, Prisma ORM, and PostgreSQL.",
-      tags: ["Next.js", "TypeScript", "Prisma ORM", "PostgreSQL", "Tailwind CSS"],
+        "An offline-first Flutter mobile application utilizing SQLite for reliable local task logging, habit streaks, data persistence, and scheduled notifications.",
+      overview:
+        "Daily Flow is a personal routine and habit optimization mobile app built for focused daily productivity. Created using Flutter and Dart, the application uses an offline-first SQLite database architecture to ensure instant, zero-latency interaction without network dependency. It features streak calculations, calendar logging, and local push notifications to prompt users throughout the day.",
+      highlights: [
+        "Created offline-first mobile app utilizing SQLite for reliable local task logging, habit streaks, and data persistence.",
+        "Implemented scheduled notifications to prompt user daily routines and increase task completion rates.",
+        "Engineered smooth gesture-driven habit check-ins and persistent streak milestones.",
+      ],
+      tags: ["Flutter", "Dart", "SQLite", "Offline-First", "Local Notifications"],
+      techStack: [
+        "Flutter",
+        "Dart",
+        "SQLite",
+        "Local Notifications",
+        "State Management",
+      ],
+      image: "/images/projects/smart-diagnostic-platform.jpg",
       liveUrl: "#",
-      githubUrl: "https://github.com/YOUR_GITHUB/smart-diagnostic-platform",
+      githubUrl: "https://github.com/Bunvathana876",
       featured: true,
-      metrics: "Type-Safe Prisma + PostgreSQL",
-      accentColor: "from-purple-500/20 via-indigo-500/10 to-cyan-500/20",
+      metrics: "100% Offline SQLite Persistence",
+      accentColor: "from-emerald-500/20 via-teal-500/10 to-cyan-500/20",
     },
     {
-      id: "sunflower-expert-system",
-      title: "Sunflower Disease Diagnosis Expert System",
-      subtitle: "Bilingual Agricultural Rule-Based Diagnostic Engine",
+      id: "tea-pos-system",
+      slug: "tea-pos-system",
+      title: "Coffee & Milk Tea Shop POS System",
+      subtitle: "Real-Time Point-of-Sale Checkout & Order Management System",
+      category: "Web Application",
+      year: "2024",
+      role: "Frontend Developer",
       description:
-        "A bilingual (English/Khmer) rule-based agricultural diagnostic system built with React, FastAPI, Flask, and PostgreSQL.",
-      tags: ["React", "FastAPI", "Flask", "PostgreSQL", "English / Khmer"],
+        "A responsive point-of-sale checkout system supporting customizable drink options (sweetness, ice, toppings) with real-time receipt computation.",
+      overview:
+        "Designed for counter checkout and beverage retail operations, this Point-of-Sale web platform accelerates cashier order entry. Built with React and Tailwind CSS, it enables rapid drink selection, multi-tier option customization (sweetness, ice level, extra toppings), dynamic tax and discount calculations, and real-time receipt generation.",
+      highlights: [
+        "Built point-of-sale checkout system supporting customizable drink options (sweetness, ice, toppings) with real-time receipt computation.",
+        "Engineered responsive, touch-optimized cashier UI in React and Tailwind CSS for rapid counter transactions.",
+        "Handled real-time cart state with dynamic price recalculation and instant receipt review.",
+      ],
+      tags: ["React", "JavaScript", "Tailwind CSS", "POS System", "Real-Time Cart"],
+      techStack: [
+        "React.js",
+        "JavaScript (ES6+)",
+        "Tailwind CSS",
+        "HTML5",
+        "CSS3",
+      ],
+      image: "/images/projects/sunflower-expert-system.jpg",
       liveUrl: "#",
-      githubUrl: "https://github.com/YOUR_GITHUB/sunflower-expert-system",
+      githubUrl: "https://github.com/Bunvathana876",
       featured: true,
-      metrics: "Bilingual EN/KM Rule Engine",
-      accentColor: "from-blue-500/20 via-cyan-500/10 to-emerald-500/20",
+      metrics: "Real-Time Receipt Computation",
+      accentColor: "from-orange-500/20 via-amber-500/10 to-yellow-500/20",
     },
   ],
   timeline: [
     {
-      period: "2023 — Present",
-      role: "B.Sc. in Computer Science & Software Engineering (Year 4)",
+      period: "2023 — 2026",
+      role: "Bachelor of Science in Software Development",
       organization: "Norton University",
       location: "Phnom Penh, Cambodia",
       description:
-        "Fourth-year undergraduate focusing on software architecture, mobile application engineering, relational database systems, and intelligent rule-based software.",
+        "Senior undergraduate studying Software Development with specialized coursework in cross-platform mobile development with Flutter, full-stack web architecture, relational database design, and software quality.",
       highlights: [
-        "Engineered full-stack and cross-platform capstone and academic systems",
-        "Specialized in Flutter/Dart, Next.js, Python (FastAPI/Flask), and PostgreSQL",
+        "Bachelor of Science in Software Development (2023 — 2026)",
+        "Focus on Flutter, React, Next.js, Python (FastAPI), and PostgreSQL",
       ],
       type: "education",
     },
     {
       period: "2025 — 2026",
-      role: "Full-Stack & Cross-Platform Mobile Developer",
-      organization: "ShopPanda & Smart Diagnostic Systems",
+      role: "Full-Stack & Mobile Developer",
+      organization: "Full-Stack Dual-Client E-Commerce Platform",
       location: "Phnom Penh, Cambodia",
       description:
-        "Architected and delivered ShopPanda—an offline-capable Flutter supermarket commerce app with a Next.js admin portal—alongside an enterprise-style IT helpdesk ticketing platform powered by Next.js, TypeScript, Prisma ORM, and PostgreSQL.",
+        "Built cross-platform shopping app in Flutter with smooth catalog browsing, client cart state, and order workflows. Developed administrative dashboard using Next.js and containerized backend with Docker Compose.",
       highlights: [
-        "Implemented offline catalog state management and adaptive dark mode in Flutter",
-        "Designed normalized PostgreSQL schemas with type-safe Prisma ORM queries",
+        "Built cross-platform shopping app in Flutter with smooth catalog browsing and order workflows",
+        "Developed Next.js admin dashboard and containerized backend with Docker Compose",
       ],
       type: "engineering",
     },
     {
-      period: "2024 — 2025",
-      role: "Backend & Knowledge Systems Developer",
-      organization: "Sunflower Disease Diagnosis Expert System",
+      period: "2025",
+      role: "Mobile Application Developer",
+      organization: "Daily Flow — Habit & Routine Tracker",
       location: "Phnom Penh, Cambodia",
       description:
-        "Built a bilingual (English/Khmer) rule-based agricultural diagnostic platform enabling farmers and agronomists to identify sunflower crop diseases through interactive symptom inference.",
+        "Created offline-first mobile app utilizing SQLite for reliable local task logging, habit streaks, and data persistence. Implemented scheduled notifications to prompt user daily routines and increase task completion rates.",
       highlights: [
-        "Combined React frontend with Python (FastAPI & Flask) inference APIs",
-        "Full Khmer and English localization backed by PostgreSQL persistence",
+        "Created offline-first mobile app with SQLite data persistence",
+        "Implemented scheduled notifications for daily routine prompts",
+      ],
+      type: "project",
+    },
+    {
+      period: "2024 — 2025",
+      role: "Software Developer",
+      organization: "Sunflower Disease Diagnostic Expert System",
+      location: "Phnom Penh, Cambodia",
+      description:
+        "Engineered expert diagnosis engine that evaluates sunflower leaf symptoms to identify plant diseases and prescribe structured treatment plans in Khmer and English backed by FastAPI and PostgreSQL.",
+      highlights: [
+        "Engineered expert diagnosis engine evaluating sunflower leaf symptoms",
+        "Designed bilingual database schema in PostgreSQL supporting dynamic symptom data and remedies in Khmer and English",
+      ],
+      type: "project",
+    },
+    {
+      period: "2024",
+      role: "Frontend Developer",
+      organization: "Coffee & Milk Tea Shop POS System",
+      location: "Phnom Penh, Cambodia",
+      description:
+        "Built point-of-sale checkout system supporting customizable drink options (sweetness, ice, toppings) with real-time receipt computation using React, JavaScript, and Tailwind CSS.",
+      highlights: [
+        "Built POS checkout system supporting customizable drink options",
+        "Real-time receipt calculation and touch-friendly cashier workflow",
       ],
       type: "project",
     },
   ],
   socials: {
+    phone: "(+855) 89 429 756",
     email: "vathanabun934@gmail.com",
+    github: "https://github.com/Bunvathana876",
+    linkedin: "https://linkedin.com/in/bunvathana",
     location: "Phnom Penh, Cambodia",
-    github: "https://github.com/YOUR_GITHUB",
-    linkedin: "https://linkedin.com/in/YOUR_LINKEDIN",
+    address: "Sangkat Tuek L'ak Ti Pir, Khan Tuol Kouk, Phnom Penh, Cambodia",
+    dateOfBirth: "17 December 2005",
   },
 };

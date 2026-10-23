@@ -12,7 +12,7 @@ export default function PortfolioPage() {
   return (
     <main className="relative overflow-hidden">
       <Hero />
-      <SectionTransitionWrapper>
+      <SectionTransitionWrapper showDivider={false}>
         <About />
       </SectionTransitionWrapper>
       <SectionTransitionWrapper>
