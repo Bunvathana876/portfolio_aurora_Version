@@ -1,300 +1,301 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Command, FileDown, MoveUpRight, Volume2, VolumeX } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { siteData } from "@/data/site";
-import { navigateToSection } from "@/components/ui/SectionTransition";
+import { sound } from "@/lib/sound";
 
-const navItems = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Work", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+const COLORS = [
+  "bg-cyan-400 text-black shadow-[0_0_8px_rgba(0,242,254,0.6)]",
+  "bg-sky-400 text-black",
+  "bg-indigo-400 text-white shadow-[0_0_8px_rgba(129,140,248,0.6)]",
+  "bg-purple-400 text-white",
+  "bg-blue-400 text-black",
+  "bg-teal-400 text-black",
 ];
 
-function formatPhnomPenhTime(date: Date): string {
-  try {
-    return new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Phnom_Penh",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }).format(date);
-  } catch {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  }
-}
+const MENU_LINKS = [
+  { name: "Home", url: "/#banner" },
+  { name: "About Me", url: "/#about-me" },
+  { name: "My Stack", url: "/#my-stack" },
+  { name: "Projects", url: "/#selected-projects" },
+  { name: "Experience", url: "/#my-experience" },
+  { name: "Contact", url: "/#contact" },
+];
+
+const SOCIAL_LINKS = [
+  { name: "github", url: siteData.socials.github },
+  { name: "linkedin", url: siteData.socials.linkedin },
+  { name: "resume (pdf)", url: "/cv.pdf" },
+];
 
 export function Navbar() {
-  const navListRef = useRef<HTMLUListElement>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-  const [clockText, setClockText] = useState<string>("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [soundActive, setSoundActive] = useState(true);
+  const [localTime, setLocalTime] = useState("");
+  const router = useRouter();
 
-  // Live clock for Phnom Penh (UTC+7)
   useEffect(() => {
-    const updateClock = () => {
-      setClockText(formatPhnomPenhTime(new Date()));
+    setSoundActive(sound.isEnabled());
+
+    const updateTime = () => {
+      try {
+        const timeStr = new Intl.DateTimeFormat("en-US", {
+          timeZone: "Asia/Phnom_Penh",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        }).format(new Date());
+        setLocalTime(timeStr);
+      } catch {
+        setLocalTime("Phnom Penh");
+      }
     };
-    updateClock();
-    const interval = window.setInterval(updateClock, 15000);
-    return () => window.clearInterval(interval);
+
+    updateTime();
+    const interval = setInterval(updateTime, 30000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Sync theme state with system preference & stored override
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const computeIsDark = () => {
-      try {
-        const stored = localStorage.getItem("color-scheme");
-        if (stored === "dark") return true;
-        if (stored === "light") return false;
-      } catch {
-        // Ignore storage errors
-      }
-      return mediaQuery.matches;
-    };
-
-    const applyDomScheme = (scheme: string | null) => {
-      const meta = document.querySelector(
-        'meta[name="color-scheme"]'
-      ) as HTMLMetaElement | null;
-      if (meta) {
-        meta.content = scheme ?? "light dark";
-      }
-      document.documentElement.classList.toggle("dark", scheme === "dark");
-      document.documentElement.classList.toggle("light", scheme === "light");
-      setIsDark(computeIsDark());
-    };
-
-    setIsDark(computeIsDark());
-
-    const handleMediaChange = () => {
-      setIsDark(computeIsDark());
-    };
-
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === "color-scheme") {
-        applyDomScheme(e.newValue);
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleMediaChange);
-    window.addEventListener("storage", handleStorage);
-    return () => {
-      mediaQuery.removeEventListener("change", handleMediaChange);
-      window.removeEventListener("storage", handleStorage);
-    };
-  }, []);
-
-  const toggleColorScheme = () => {
-    const systemIsDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const systemScheme = systemIsDark ? "dark" : "light";
-    const targetScheme = isDark ? "light" : "dark";
-
-    const meta = document.querySelector(
-      'meta[name="color-scheme"]'
-    ) as HTMLMetaElement | null;
-
-    if (targetScheme === systemScheme) {
-      try {
-        localStorage.removeItem("color-scheme");
-      } catch {
-        // Ignore storage errors
-      }
-      if (meta) meta.content = "light dark";
-      document.documentElement.classList.remove("dark", "light");
-    } else {
-      try {
-        localStorage.setItem("color-scheme", targetScheme);
-      } catch {
-        // Ignore storage errors
-      }
-      if (meta) meta.content = targetScheme;
-      document.documentElement.classList.toggle("dark", targetScheme === "dark");
-      document.documentElement.classList.toggle(
-        "light",
-        targetScheme === "light"
-      );
-    }
-
-    setIsDark(targetScheme === "dark");
+  const handleToggleSound = () => {
+    const newState = sound.toggle();
+    setSoundActive(newState);
   };
 
-  // Scrollspy with native CSS `scroll-target-group: auto` + IntersectionObserver fallback
-  useEffect(() => {
-    const navContainer = navListRef.current;
-    if (!navContainer) return;
-
-    const supportsScrollTargetGroup =
-      typeof CSS !== "undefined" &&
-      typeof CSS.supports === "function" &&
-      CSS.supports("scroll-target-group: auto");
-
-    if (supportsScrollTargetGroup) {
-      const syncAriaCurrent = () => {
-        const currentLink = navContainer.querySelector("a:target-current");
-        navContainer.querySelectorAll("a").forEach((link) => {
-          link.setAttribute(
-            "aria-current",
-            link === currentLink ? "true" : "false"
-          );
-        });
-      };
-
-      syncAriaCurrent();
-      document.addEventListener("scrollend", syncAriaCurrent, {
-        passive: true,
-      });
-      return () => document.removeEventListener("scrollend", syncAriaCurrent);
-    } else {
-      const navLinks = navContainer.querySelectorAll("a");
-      const sections = document.querySelectorAll("main section[id]");
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const id = entry.target.getAttribute("id");
-              navLinks.forEach((link) => {
-                const isActive = link.getAttribute("href") === `#${id}`;
-                link.classList.toggle(":target-current", isActive);
-                link.setAttribute(
-                  "aria-current",
-                  isActive ? "true" : "false"
-                );
-              });
-            }
-          });
-        },
-        { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
-      );
-
-      sections.forEach((section) => observer.observe(section));
-      return () => observer.disconnect();
+  const openCommandPalette = () => {
+    sound.tick();
+    setIsMenuOpen(false);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("open-command-palette"));
     }
-  }, []);
+  };
+
+  const handleNavClick = (url: string) => {
+    sound.tick();
+    setIsMenuOpen(false);
+    router.push(url);
+  };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background">
-      <nav
-        aria-label="Primary Navigation"
-        className="mx-auto flex max-w-[1320px] items-center justify-between px-6 py-4 sm:px-10 lg:px-16"
-      >
-        {/* Left: Name in Serif */}
-        <a
-          href="#hero"
-          onClick={(e) => navigateToSection("#hero", "Overview", e)}
-          className="font-serif text-xl sm:text-2xl tracking-tight text-foreground transition-colors hover:text-accent focus-visible:outline-none"
-        >
-          {siteData.name}
-        </a>
-
-        {/* Right: Small Uppercase Links + Tiny Live Location & Clock */}
-        <div className="flex items-center gap-6 lg:gap-8">
-          <ul
-            ref={navListRef}
-            className="scrollspy-nav hidden md:flex items-center gap-6 lg:gap-7"
-          >
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  onClick={(e) => navigateToSection(item.href, item.label, e)}
-                  className="editorial-link text-[11px] uppercase tracking-[0.16em] text-foreground focus-visible:outline-none"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <span
-             aria-hidden="true"
-            className="hidden md:inline-block h-3.5 w-px bg-border"
-          />
-
-          <div className="flex items-center gap-4">
-            <span
-              className="text-[11px] uppercase tracking-[0.14em] text-muted tabular-nums"
-              aria-label="Location and local time"
+    <>
+      <header className="sticky top-0 z-[40]">
+        {/* Floating Liquid Glass Top Bar */}
+        <div className="absolute top-4 left-4 right-4 md:top-5 md:left-8 md:right-8 z-[2] flex items-center justify-between pointer-events-none">
+          {/* Left: Brand Monogram + Live Status */}
+          <div className="flex items-center gap-3 pointer-events-auto">
+            <a
+              href="/#banner"
+              onClick={() => sound.tick()}
+              className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-background-light/70 backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 shadow-lg group transition-all"
             >
-              Phnom Penh{clockText ? `, ${clockText}` : ""}
-            </span>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-tr from-cyan-400 to-indigo-500 text-slate-950 text-xs font-anton font-bold">
+                BV
+              </span>
+              <span className="font-anton text-base tracking-wider text-foreground group-hover:text-cyan-400 transition-colors">
+                {siteData.name.toUpperCase()}
+              </span>
+            </a>
 
+            {/* Live Phnom Penh Clock */}
+            {localTime && (
+              <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background-light/50 backdrop-blur-xl border border-white/5 text-[11px] font-mono text-muted-foreground">
+                <span className="size-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                <span>{localTime} · UTC+7</span>
+              </div>
+            )}
+          </div>
+
+          {/* Right: Quick Action Controls */}
+          <div className="flex items-center gap-2.5 pointer-events-auto pr-16 md:pr-18">
+            {/* Audio Feedback Toggle */}
             <button
               type="button"
-              onClick={toggleColorScheme}
-              aria-label={
-                isDark ? "Switch to light theme" : "Switch to dark theme"
-              }
-              className="editorial-link text-[11px] uppercase tracking-[0.16em] text-muted hover:text-foreground transition-colors focus-visible:outline-none"
+              onClick={handleToggleSound}
+              title={soundActive ? "Mute interactive audio feedback" : "Enable interactive audio feedback"}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background-light/60 backdrop-blur-xl border border-white/10 text-xs font-mono text-muted-foreground hover:text-cyan-400 hover:border-cyan-400/50 transition-all shadow-sm cursor-pointer"
             >
-              Dark / Light
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((v) => !v)}
-              aria-label="Toggle Menu"
-              aria-expanded={mobileMenuOpen}
-              className="inline-flex md:hidden items-center justify-center text-foreground transition-colors hover:text-accent focus-visible:outline-none"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-4 w-4" />
+              {soundActive ? (
+                <>
+                  <Volume2 size={13} className="text-cyan-400" />
+                  <span className="hidden md:inline text-[11px]">Audio ON</span>
+                </>
               ) : (
-                <Menu className="h-4 w-4" />
+                <>
+                  <VolumeX size={13} className="text-muted-foreground" />
+                  <span className="hidden md:inline text-[11px]">Audio OFF</span>
+                </>
               )}
             </button>
+
+            {/* Command Palette Trigger */}
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background-light/60 backdrop-blur-xl border border-white/10 text-[11px] font-mono text-muted-foreground hover:text-foreground hover:border-white/20 transition-all cursor-pointer shadow-sm"
+            >
+              <Command size={12} className="text-cyan-400" />
+              <span>⌘K</span>
+            </button>
+
+            {/* Resume PDF */}
+            <a
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.pop()}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-background-light/60 backdrop-blur-xl border border-white/10 text-xs font-mono text-foreground hover:text-cyan-400 hover:border-cyan-400/50 transition-all shadow-sm"
+            >
+              <FileDown size={13} className="text-cyan-400" />
+              <span>CV PDF</span>
+            </a>
           </div>
         </div>
-      </nav>
 
-      {/* Mobile Flat Dropdown */}
-      {mobileMenuOpen && (
-        <div className="border-t border-border bg-background px-6 py-4 md:hidden">
-          <ul className="flex flex-col divide-y divide-border">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  onClick={(e) => {
-                    setMobileMenuOpen(false);
-                    navigateToSection(item.href, item.label, e);
-                  }}
-                  className="flex items-center justify-between py-3 text-[11px] uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent"
-                >
-                  <span>{item.label}</span>
-                  <span aria-hidden="true" className="text-muted">
-                    →
-                  </span>
-                </a>
-              </li>
-            ))}
-            <li className="pt-3">
-              <button
-                type="button"
-                onClick={() => {
-                  toggleColorScheme();
-                }}
-                className="flex w-full items-center justify-between py-2 text-[11px] uppercase tracking-[0.16em] text-muted hover:text-foreground"
-              >
-                <span>Theme</span>
-                <span className="editorial-link text-foreground">Dark / Light</span>
-              </button>
-            </li>
-          </ul>
+        {/* Signature Two-Line Hamburger Button */}
+        <button
+          type="button"
+          aria-label="Toggle Menu"
+          aria-expanded={isMenuOpen}
+          className={cn(
+            "group size-12 fixed top-4 right-4 md:top-5 md:right-8 z-[45] rounded-full bg-background-light/80 backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 shadow-xl transition-all cursor-pointer"
+          )}
+          onClick={() => {
+            sound.pop();
+            setIsMenuOpen(!isMenuOpen);
+          }}
+        >
+          <span
+            className={cn(
+              "inline-block w-2/5 h-0.5 bg-foreground rounded-full absolute left-1/2 -translate-x-1/2 top-1/2 duration-300 -translate-y-[4px]",
+              {
+                "rotate-45 -translate-y-1/2 bg-cyan-400": isMenuOpen,
+                "md:group-hover:rotate-12": !isMenuOpen,
+              }
+            )}
+          />
+          <span
+            className={cn(
+              "inline-block w-2/5 h-0.5 bg-foreground rounded-full absolute left-1/2 -translate-x-1/2 top-1/2 duration-300 translate-y-[4px]",
+              {
+                "-rotate-45 -translate-y-1/2 bg-cyan-400": isMenuOpen,
+                "md:group-hover:-rotate-12": !isMenuOpen,
+              }
+            )}
+          />
+        </button>
+      </header>
+
+      {/* Backdrop Overlay */}
+      <div
+        className={cn(
+          "overlay fixed inset-0 z-[41] bg-black/75 backdrop-blur-md transition-all duration-300",
+          {
+            "opacity-0 invisible pointer-events-none": !isMenuOpen,
+          }
+        )}
+        onClick={() => {
+          sound.pop();
+          setIsMenuOpen(false);
+        }}
+      />
+
+      {/* Curved Slide-Out Liquid Glass Drawer */}
+      <div
+        className={cn(
+          "fixed top-0 right-0 h-[100dvh] w-[500px] max-w-[calc(100vw-2rem)] transform translate-x-full transition-transform duration-700 z-[42] overflow-hidden gap-y-12",
+          "flex flex-col lg:justify-center py-10 border-l border-white/10 bg-[#0c1020]/95 backdrop-blur-2xl shadow-2xl",
+          { "translate-x-0": isMenuOpen }
+        )}
+      >
+        <div className="grow flex md:items-center w-full max-w-[340px] mx-8 sm:mx-auto">
+          <div className="flex gap-10 lg:justify-between max-lg:flex-col w-full">
+            <div className="max-lg:order-2">
+              <p className="text-muted-foreground mb-4 md:mb-6 tracking-widest text-xs font-mono uppercase">
+                SOCIAL &amp; CONNECT
+              </p>
+              <ul className="space-y-3">
+                {SOCIAL_LINKS.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => sound.tick()}
+                      className="text-base capitalize hover:underline hover:text-cyan-400 text-foreground transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <button
+                    type="button"
+                    onClick={openCommandPalette}
+                    className="text-sm font-mono text-muted-foreground hover:text-cyan-400 flex items-center gap-1.5 pt-3 cursor-pointer"
+                  >
+                    <Command size={14} className="text-cyan-400" />
+                    <span>Quick Search (⌘K)</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-muted-foreground mb-4 md:mb-6 tracking-widest text-xs font-mono uppercase">
+                NAVIGATION
+              </p>
+              <ul className="space-y-3.5">
+                {MENU_LINKS.map((link, idx) => (
+                  <li key={link.name}>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick(link.url)}
+                      className="group text-xl sm:text-2xl font-anton flex items-center gap-3 hover:text-cyan-400 transition-colors cursor-pointer"
+                    >
+                      <span
+                        className={cn(
+                          "size-3.5 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-[180%] transition-all",
+                          COLORS[idx % COLORS.length]
+                        )}
+                      >
+                        <MoveUpRight
+                          size={8}
+                          className="scale-0 group-hover:scale-100 transition-all"
+                        />
+                      </span>
+                      <span>{link.name}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
-      )}
-    </header>
+
+        <div className="w-full max-w-[340px] mx-8 sm:mx-auto space-y-2 border-t border-white/10 pt-6">
+          <p className="text-muted-foreground text-xs font-mono tracking-widest uppercase">
+            DIRECT INQUIRY
+          </p>
+          <a
+            href={`mailto:${siteData.socials.email}`}
+            onClick={() => sound.tick()}
+            className="block text-base font-mono text-foreground hover:text-cyan-400 hover:underline transition-colors"
+          >
+            {siteData.socials.email}
+          </a>
+          <a
+            href={`tel:${siteData.socials.phone.replace(/[^+\d]/g, "")}`}
+            onClick={() => sound.tick()}
+            className="block text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {siteData.socials.phone} &middot; Phnom Penh, KH
+          </a>
+        </div>
+      </div>
+    </>
   );
 }
 
+export default Navbar;

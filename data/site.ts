@@ -18,6 +18,19 @@ export interface SkillColumn {
   items: string[];
 }
 
+export interface StackItem {
+  name: string;
+  icon: string;
+}
+
+export interface MyStack {
+  mobile: StackItem[];
+  frontend: StackItem[];
+  backend: StackItem[];
+  database: StackItem[];
+  tools: StackItem[];
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -65,6 +78,7 @@ export interface SiteConfig {
     location: string;
   };
   skills: SkillColumn[];
+  myStack: MyStack;
   coreSkills: string[];
   personalTraits: string[];
   languages: LanguageItem[];
@@ -131,6 +145,41 @@ export const siteData: SiteConfig = {
       ],
     },
   ],
+  myStack: {
+    mobile: [
+      { name: "Flutter", icon: "/logo/flutter.svg" },
+      { name: "Dart", icon: "/logo/dart.svg" },
+      { name: "SQLite (Offline-First)", icon: "/logo/sqlite.svg" },
+    ],
+    frontend: [
+      { name: "React.js", icon: "/logo/react.png" },
+      { name: "Next.js", icon: "/logo/next.png" },
+      { name: "TypeScript", icon: "/logo/ts.png" },
+      { name: "JavaScript (ES6+)", icon: "/logo/js.png" },
+      { name: "Tailwind CSS", icon: "/logo/tailwind.png" },
+      { name: "HTML5", icon: "/logo/html5.svg" },
+      { name: "CSS3", icon: "/logo/css3.svg" },
+      { name: "GSAP", icon: "/logo/gsap.png" },
+      { name: "Framer Motion", icon: "/logo/framer-motion.png" },
+    ],
+    backend: [
+      { name: "Python", icon: "/logo/python.svg" },
+      { name: "FastAPI", icon: "/logo/fastapi.svg" },
+      { name: "Node.js", icon: "/logo/node.png" },
+    ],
+    database: [
+      { name: "PostgreSQL", icon: "/logo/postgreSQL.png" },
+      { name: "SQLite", icon: "/logo/sqlite.svg" },
+      { name: "MySQL", icon: "/logo/mysql.svg" },
+    ],
+    tools: [
+      { name: "Docker & Compose", icon: "/logo/docker.svg" },
+      { name: "Git", icon: "/logo/git.png" },
+      { name: "GitHub", icon: "/logo/github.png" },
+      { name: "Postman", icon: "/logo/postman.svg" },
+      { name: "Linux CLI", icon: "/logo/linux.svg" },
+    ],
+  },
   coreSkills: [
     "Adaptable & Fast Learner",
     "Creative Problem-Solving",
@@ -280,7 +329,7 @@ export const siteData: SiteConfig = {
         "HTML5",
         "CSS3",
       ],
-      image: "/images/projects/sunflower-expert-system.jpg",
+      image: "/images/projects/tea-pos-system.jpg",
       liveUrl: "#",
       githubUrl: "https://github.com/Bunvathana876",
       featured: true,

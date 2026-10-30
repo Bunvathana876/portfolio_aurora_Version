@@ -1,28 +1,39 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Serif } from "next/font/google";
+import { Anton, Roboto_Flex } from "next/font/google";
+import { ReactLenis } from "lenis/react";
+
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import { siteData } from "@/data/site";
 import { Navbar } from "@/components/ui/Navbar";
+import { Footer } from "@/components/sections/Footer";
+import { Preloader } from "@/components/ui/Preloader";
+import { ScrollProgressIndicator } from "@/components/ui/ScrollProgressIndicator";
+import { AmbientCanvas } from "@/components/ui/AmbientCanvas";
+import { StickyEmail } from "@/components/ui/StickyEmail";
 import { CommandPalette } from "@/components/ui/CommandPalette";
+import { ToastProvider } from "@/components/ui/Toast";
 
-const inter = Inter({
+const antonFont = Anton({
+  weight: "400",
+  style: "normal",
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-anton",
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  style: ["normal", "italic"],
+const robotoFlex = Roboto_Flex({
+  weight: ["100", "400", "500", "600", "700", "800"],
+  style: "normal",
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-roboto-flex",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteData.siteUrl),
   title: {
-    default: `${siteData.name} — ${siteData.role}`,
+    default: `Portfolio - ${siteData.name}`,
     template: `%s | ${siteData.name}`,
   },
   description: `${siteData.tagline} ${siteData.bio}`,
@@ -73,23 +84,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${inter.variable} ${instrumentSerif.variable}`}
-    >
-      <head>
-        <meta name="color-scheme" content="light dark" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var s=localStorage.getItem("color-scheme");var m=document.querySelector('meta[name="color-scheme"]');if(m){m.content=s||"light dark";}if(s==="dark"){document.documentElement.classList.add("dark");document.documentElement.classList.remove("light");}else if(s==="light"){document.documentElement.classList.add("light");document.documentElement.classList.remove("dark");}}catch(e){}`,
-          }}
-        />
-      </head>
-      <body className="font-sans bg-background text-foreground antialiased">
-        <Navbar />
-        <CommandPalette />
-        <div className="relative">{children}</div>
+    <html lang="en" className="dark">
+      <body
+        className={`${antonFont.variable} ${robotoFlex.variable} antialiased`}
+      >
+        <ToastProvider>
+          <ReactLenis
+            root
+            options={{
+              lerp: 0.1,
+              duration: 1.4,
+            }}
+          >
+            <Navbar />
+            <CommandPalette />
+            <main className="relative z-[1]">{children}</main>
+            <Footer />
+
+            <Preloader />
+            <ScrollProgressIndicator />
+            <AmbientCanvas />
+            <StickyEmail />
+          </ReactLenis>
+        </ToastProvider>
       </body>
     </html>
   );

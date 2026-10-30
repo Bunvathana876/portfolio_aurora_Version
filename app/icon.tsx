@@ -12,18 +12,19 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 15,
-          background: "#F5F2EC",
+          fontSize: 14,
+          background: "#090A10",
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#111111",
-          fontWeight: 600,
-          borderRadius: 2,
-          border: "1px solid #D9D5CC",
-          fontFamily: "Georgia, serif",
+          color: "#F8FAFC",
+          fontWeight: 700,
+          borderRadius: 6,
+          border: "1px solid #1E2436",
+          letterSpacing: "-0.04em",
+          fontFamily: "system-ui, -apple-system, sans-serif",
         }}
       >
         {siteData.initials}

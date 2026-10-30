@@ -48,16 +48,16 @@ export interface VirtualIdBadgeProps {
 
 export function VirtualIdBadge({
   name = siteData.name || "BUN VATHANA",
-  position = siteData.role || "FULL-STACK & MOBILE DEVELOPER",
-  company = "COMPANY",
+  position = "SOFTWARE DEVELOPER · MOBILE & WEB",
+  company = "NORTON UNIVERSITY",
   photoUrl = "/images/pic-pf-v2.jpeg",
-  joinDate = "01-01-2026",
-  expireDate = "31-12-2030",
-  idNumber = "ID: #BV-9824-2026",
-  phone = "+855 (0) 96 876 5432",
+  joinDate = "2023",
+  expireDate = "2026 (Senior)",
+  idNumber = "B.S. SOFTWARE DEV",
+  phone = siteData.socials?.phone || "(+855) 89 429 756",
   location = siteData.socials?.location || "Phnom Penh, Cambodia",
-  email = siteData.socials?.email || "bunvathanasrey@gmail.com",
-  website = siteData.siteUrl?.replace(/^https?:\/\//, "") || "bunvathana.dev",
+  email = siteData.socials?.email || "vathanabun934@gmail.com",
+  website = "github.com/Bunvathana876",
   className = "",
   showControls = true,
 }: VirtualIdBadgeProps) {
@@ -436,17 +436,17 @@ export function VirtualIdBadge({
                     <QrCode className="w-9 h-9 text-slate-950" />
                   </div>
 
-                  {/* Metadata: Join & Expire dates */}
-                  <div className="text-right font-mono text-[9px] text-slate-300 space-y-0.5">
+                  {/* Metadata: Academic Period & Status */}
+                  <div className="text-right font-mono text-[9.5px] text-slate-200 space-y-0.5">
                     <div className="text-[10px] font-bold text-cyan-400 tracking-wider">
                       {idNumber}
                     </div>
                     <div>
-                      <span className="text-slate-400">Join: </span>
+                      <span className="text-slate-400">Enrolled: </span>
                       <span className="text-white font-medium">{joinDate}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400">Expire: </span>
+                      <span className="text-slate-400">Graduating: </span>
                       <span className="text-white font-medium">{expireDate}</span>
                     </div>
                   </div>
@@ -525,41 +525,38 @@ export function VirtualIdBadge({
                   </span>
                 </div>
 
-                {/* TERMS & CONDITIONS BANNER */}
+                {/* CANDIDATE SUMMARY BANNER */}
                 <div className="relative z-10 my-1">
                   <div className="w-full py-1 px-3 rounded bg-cyan-400 text-slate-950 font-black text-[10px] tracking-widest uppercase flex items-center justify-between shadow-[0_0_12px_rgba(6,182,212,0.5)]">
-                    <span>TERMS &amp; CONDITIONS</span>
+                    <span>CANDIDATE QUICK PROFILE</span>
                     <ShieldCheck className="w-3.5 h-3.5" />
                   </div>
                 </div>
 
-                {/* NUMBERED LIST OF RULES */}
-                <div className="relative z-10 space-y-1.5 text-[9.5px] leading-tight text-slate-200/90 font-sans">
-                  <div className="flex items-start gap-1.5 bg-slate-950/60 p-1.5 rounded border border-white/5">
+                {/* NUMBERED LIST OF VERIFIED CREDENTIALS */}
+                <div className="relative z-10 space-y-1.5 text-[10px] leading-snug text-slate-100 font-sans">
+                  <div className="flex items-start gap-1.5 bg-slate-950/70 p-1.5 rounded border border-white/10">
                     <span className="text-cyan-400 font-bold shrink-0">1.</span>
                     <p>
-                      This credential remains the official property of the issuer
-                      and must be surrendered upon request.
+                      <strong>Education:</strong> B.S. in Software Development, Norton University (2023–2026).
                     </p>
                   </div>
-                  <div className="flex items-start gap-1.5 bg-slate-950/60 p-1.5 rounded border border-white/5">
+                  <div className="flex items-start gap-1.5 bg-slate-950/70 p-1.5 rounded border border-white/10">
                     <span className="text-cyan-400 font-bold shrink-0">2.</span>
                     <p>
-                      Must be visibly displayed while within project facilities,
-                      domains, or workspaces.
+                      <strong>Mobile &amp; Web:</strong> Flutter, Dart, React.js, Next.js, JavaScript (ES6+), Tailwind CSS.
                     </p>
                   </div>
-                  <div className="flex items-start gap-1.5 bg-slate-950/60 p-1.5 rounded border border-white/5">
+                  <div className="flex items-start gap-1.5 bg-slate-950/70 p-1.5 rounded border border-white/10">
                     <span className="text-cyan-400 font-bold shrink-0">3.</span>
                     <p>
-                      Unauthorized duplication, cloning, or transfer to third
-                      parties is strictly prohibited.
+                      <strong>Backend &amp; DB:</strong> Python, FastAPI, Node.js, PostgreSQL, SQLite, MySQL, Docker.
                     </p>
                   </div>
-                  <div className="flex items-start gap-1.5 bg-slate-950/60 p-1.5 rounded border border-white/5">
+                  <div className="flex items-start gap-1.5 bg-slate-950/70 p-1.5 rounded border border-white/10">
                     <span className="text-cyan-400 font-bold shrink-0">4.</span>
                     <p>
-                      Report loss or damage immediately to developer operations.
+                      <strong>Languages:</strong> Khmer (Native) &bull; English (Intermediate).
                     </p>
                   </div>
                 </div>
@@ -611,7 +608,7 @@ export function VirtualIdBadge({
             aria-label="Flip ID badge between front and back"
           >
             <RotateCcw className="w-3.5 h-3.5 transition-transform duration-500 group-hover:rotate-180 text-cyan-400" />
-            <span>{isFlipped ? "View Front Face" : "Flip to Back (Terms)"}</span>
+            <span>{isFlipped ? "View Front Face" : "Flip to Back (Summary)"}</span>
           </button>
           <p className="text-[11px] font-mono text-muted tracking-tight text-center">
             Hover to tilt in 3D &bull; Click to flip

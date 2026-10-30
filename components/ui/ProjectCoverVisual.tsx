@@ -10,125 +10,230 @@ function SchematicIllustration({ slug }: { slug: string }) {
   if (slug === "sunflower-expert-system") {
     return (
       <svg
-        viewBox="0 0 360 220"
-        className="w-full h-full max-h-[76%] max-w-[82%] mx-auto"
+        viewBox="0 0 380 210"
+        className="w-full h-full max-h-[82%] max-w-[90%] mx-auto"
         fill="none"
         aria-hidden="true"
       >
-        {/* Leaf Silhouette Outline */}
-        <path
-          d="M60 170 C50 110, 110 50, 170 40 C210 90, 200 150, 120 180 Z"
-          stroke="var(--accent)"
-          strokeWidth="1.2"
-          strokeOpacity="0.8"
-        />
-        {/* Leaf Veins / Diagnostic Neural Paths */}
-        <path
-          d="M80 160 Q130 115 165 45"
-          stroke="var(--accent)"
-          strokeWidth="1"
-          strokeDasharray="2 2"
-        />
-        <path
-          d="M110 135 Q140 130 160 145"
-          stroke="currentColor"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-        <path
-          d="M130 100 Q160 90 180 105"
-          stroke="currentColor"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-        {/* Diagnostic Engine Nodes (Right Side Decision Tree) */}
+        {/* Left Node: Symptom Input (Khmer & English) */}
         <rect
-          x="200"
-          y="35"
-          width="130"
-          height="32"
-          stroke="currentColor"
-          strokeOpacity="0.5"
+          x="16"
+          y="36"
+          width="112"
+          height="138"
+          rx="10"
+          fill="var(--surface)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+        />
+        <rect
+          x="28"
+          y="50"
+          width="88"
+          height="22"
+          rx="5"
+          fill="var(--accent-muted)"
+          stroke="var(--accent)"
           strokeWidth="1"
         />
         <text
-          x="210"
-          y="55"
-          fill="currentColor"
-          fontSize="9"
-          fontFamily="monospace"
-          fillOpacity="0.8"
+          x="36"
+          y="64"
+          fill="var(--accent)"
+          fontSize="8.5"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
         >
-          SYMPTOM EVAL (KM/EN)
+          LEAF SYMPTOMS
+        </text>
+        <text
+          x="28"
+          y="92"
+          fill="var(--fg)"
+          fontSize="8.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          • Yellowing Leaf
+        </text>
+        <text
+          x="28"
+          y="110"
+          fill="var(--fg)"
+          fontSize="8.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          • Dark Stem Lesions
+        </text>
+        <text
+          x="28"
+          y="128"
+          fill="var(--fg)"
+          fontSize="8.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          • Spore Rust Layer
+        </text>
+        <rect
+          x="28"
+          y="142"
+          width="88"
+          height="18"
+          rx="4"
+          fill="var(--bg)"
+          stroke="var(--border)"
+          strokeWidth="1"
+        />
+        <text
+          x="37"
+          y="154"
+          fill="var(--muted)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          LANG: KHMER / EN
         </text>
 
-        <rect
-          x="215"
-          y="94"
-          width="115"
-          height="32"
+        {/* Center Node: Rule-Based Inference Engine */}
+        <line
+          x1="128"
+          y1="105"
+          x2="152"
+          y2="105"
           stroke="var(--accent)"
-          strokeWidth="1.2"
+          strokeWidth="1.5"
+          strokeDasharray="3 3"
+        />
+        <circle cx="140" cy="105" r="3" fill="var(--accent)" />
+
+        <rect
+          x="152"
+          y="52"
+          width="96"
+          height="106"
+          rx="10"
+          fill="var(--accent-muted)"
+          stroke="var(--accent)"
+          strokeWidth="1.5"
         />
         <text
-          x="225"
-          y="114"
+          x="166"
+          y="78"
           fill="var(--accent)"
           fontSize="9"
-          fontFamily="monospace"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
         >
-          RULE INFERENCE
+          FASTAPI ENGINE
+        </text>
+        <text
+          x="164"
+          y="98"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          IF-THEN Rules
+        </text>
+        <text
+          x="164"
+          y="114"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          PostgreSQL DB
+        </text>
+        <text
+          x="164"
+          y="130"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          REST Endpoint
         </text>
 
+        {/* Right Node: Diagnosis & Treatment Output */}
+        <line
+          x1="248"
+          y1="105"
+          x2="270"
+          y2="105"
+          stroke="var(--accent)"
+          strokeWidth="1.5"
+          strokeDasharray="3 3"
+        />
+        <circle cx="259" cy="105" r="3" fill="#10B981" />
+
         <rect
-          x="200"
-          y="153"
-          width="130"
-          height="32"
-          stroke="currentColor"
-          strokeOpacity="0.5"
+          x="270"
+          y="36"
+          width="94"
+          height="138"
+          rx="10"
+          fill="var(--surface)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+        />
+        <rect
+          x="280"
+          y="50"
+          width="74"
+          height="20"
+          rx="4"
+          fill="rgba(16, 185, 129, 0.14)"
+          stroke="#10B981"
           strokeWidth="1"
         />
         <text
-          x="210"
-          y="173"
-          fill="currentColor"
-          fontSize="9"
-          fontFamily="monospace"
-          fillOpacity="0.8"
+          x="290"
+          y="63"
+          fill="#10B981"
+          fontSize="8"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
         >
-          TREATMENT PROTOCOL
+          DIAGNOSIS OK
         </text>
-
-        {/* Connectors */}
-        <line
-          x1="170"
-          y1="51"
-          x2="200"
-          y2="51"
-          stroke="var(--accent)"
-          strokeWidth="1"
-        />
-        <line
-          x1="265"
-          y1="67"
-          x2="265"
-          y2="94"
-          stroke="currentColor"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-        <line
-          x1="265"
-          y1="126"
-          x2="265"
-          y2="153"
-          stroke="currentColor"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-        <circle cx="170" cy="51" r="3.5" fill="var(--accent)" />
-        <circle cx="265" cy="94" r="3" fill="var(--accent)" />
+        <text
+          x="280"
+          y="90"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          Disease Match
+        </text>
+        <text
+          x="280"
+          y="108"
+          fill="var(--muted)"
+          fontSize="7.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          + Treatment Plan
+        </text>
+        <text
+          x="280"
+          y="124"
+          fill="var(--muted)"
+          fontSize="7.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          + Prevention Guide
+        </text>
+        <text
+          x="280"
+          y="148"
+          fill="var(--accent)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          React UI Output
+        </text>
       </svg>
     );
   }
@@ -137,176 +242,243 @@ function SchematicIllustration({ slug }: { slug: string }) {
   if (slug === "dual-client-ecommerce" || slug === "shop-panda") {
     return (
       <svg
-        viewBox="0 0 360 220"
-        className="w-full h-full max-h-[76%] max-w-[82%] mx-auto"
+        viewBox="0 0 380 210"
+        className="w-full h-full max-h-[82%] max-w-[90%] mx-auto"
         fill="none"
         aria-hidden="true"
       >
-        {/* Mobile Phone - Flutter Consumer App */}
+        {/* Left: Flutter Mobile Shopping App */}
         <rect
-          x="24"
+          x="18"
           y="22"
-          width="96"
-          height="176"
-          rx="6"
-          stroke="currentColor"
-          strokeOpacity="0.55"
-          strokeWidth="1"
-        />
-        {/* Phone Notch & Header */}
-        <line
-          x1="52"
-          y1="30"
-          x2="92"
-          y2="30"
-          stroke="currentColor"
-          strokeOpacity="0.3"
+          width="98"
+          height="166"
+          rx="10"
+          fill="var(--surface)"
+          stroke="var(--accent)"
           strokeWidth="1.5"
         />
-        {/* Product Card */}
-        <rect
-          x="36"
-          y="46"
-          width="72"
-          height="54"
-          stroke="var(--accent)"
-          strokeWidth="1.2"
-        />
-        {/* Product rows */}
-        <line
-          x1="36"
-          y1="112"
-          x2="108"
-          y2="112"
-          stroke="currentColor"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-        {/* Add to Cart button */}
-        <rect
-          x="36"
-          y="126"
-          width="72"
-          height="18"
+        <text
+          x="30"
+          y="42"
           fill="var(--accent)"
-          fillOpacity="0.15"
+          fontSize="8.5"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
+        >
+          FLUTTER APP
+        </text>
+        <rect
+          x="28"
+          y="52"
+          width="78"
+          height="46"
+          rx="5"
+          fill="var(--accent-muted)"
           stroke="var(--accent)"
           strokeWidth="1"
-        />
-        <line
-          x1="48"
-          y1="135"
-          x2="96"
-          y2="135"
-          stroke="var(--accent)"
-          strokeWidth="1"
-        />
-
-        {/* Central Docker / FastAPI Hub */}
-        <circle
-          cx="158"
-          cy="110"
-          r="22"
-          stroke="var(--accent)"
-          strokeWidth="1"
-          strokeDasharray="3 3"
         />
         <text
-          x="142"
-          y="113"
-          fill="var(--accent)"
+          x="36"
+          y="74"
+          fill="var(--fg)"
           fontSize="8"
-          fontFamily="monospace"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          Product Catalog
+        </text>
+        <text
+          x="36"
+          y="87"
+          fill="var(--muted)"
+          fontSize="7.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          Cart &amp; Checkout
+        </text>
+        <rect
+          x="28"
+          y="108"
+          width="78"
+          height="22"
+          rx="4"
+          fill="var(--bg)"
+          stroke="var(--border)"
+          strokeWidth="1"
+        />
+        <text
+          x="36"
+          y="122"
+          fill="var(--fg)"
+          fontSize="7.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          Order Tracking
+        </text>
+        <rect
+          x="28"
+          y="140"
+          width="78"
+          height="24"
+          rx="5"
+          fill="var(--accent)"
+        />
+        <text
+          x="42"
+          y="155"
+          fill="#FFFFFF"
+          fontSize="8"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
+        >
+          PLACE ORDER
+        </text>
+
+        {/* Center: FastAPI + Docker Hub */}
+        <line
+          x1="116"
+          y1="105"
+          x2="142"
+          y2="105"
+          stroke="var(--accent)"
+          strokeWidth="1.5"
+        />
+        <rect
+          x="142"
+          y="64"
+          width="82"
+          height="82"
+          rx="12"
+          fill="var(--surface)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+        />
+        <text
+          x="155"
+          y="92"
+          fill="var(--accent)"
+          fontSize="9"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
         >
           FastAPI
         </text>
+        <text
+          x="151"
+          y="108"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          PostgreSQL
+        </text>
+        <text
+          x="155"
+          y="124"
+          fill="#10B981"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          Dockerized
+        </text>
         <line
-          x1="120"
-          y1="110"
-          x2="136"
-          y2="110"
+          x1="224"
+          y1="105"
+          x2="246"
+          y2="105"
           stroke="var(--accent)"
-          strokeWidth="1"
-        />
-        <line
-          x1="180"
-          y1="110"
-          x2="196"
-          y2="110"
-          stroke="var(--accent)"
-          strokeWidth="1"
+          strokeWidth="1.5"
         />
 
-        {/* Next.js Admin Web Dashboard */}
+        {/* Right: Next.js Admin Dashboard */}
         <rect
-          x="196"
-          y="32"
-          width="144"
-          height="156"
-          rx="3"
-          stroke="currentColor"
-          strokeOpacity="0.55"
-          strokeWidth="1"
+          x="246"
+          y="28"
+          width="118"
+          height="154"
+          rx="10"
+          fill="var(--surface)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
         />
-        {/* Admin Header Bar */}
+        <text
+          x="258"
+          y="48"
+          fill="var(--fg)"
+          fontSize="8.5"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
+        >
+          NEXT.JS ADMIN
+        </text>
         <line
-          x1="196"
+          x1="246"
           y1="56"
-          x2="340"
+          x2="364"
           y2="56"
-          stroke="currentColor"
-          strokeOpacity="0.25"
-          strokeWidth="1"
-        />
-        <circle cx="206" cy="44" r="2.5" fill="currentColor" fillOpacity="0.4" />
-        <circle cx="215" cy="44" r="2.5" fill="currentColor" fillOpacity="0.4" />
-        <circle cx="224" cy="44" r="2.5" fill="currentColor" fillOpacity="0.4" />
-        {/* Admin Sidebar */}
-        <line
-          x1="240"
-          y1="56"
-          x2="240"
-          y2="188"
-          stroke="currentColor"
-          strokeOpacity="0.2"
-          strokeWidth="1"
-        />
-        {/* Inventory Table Rows */}
-        <rect
-          x="248"
-          y="66"
-          width="84"
-          height="22"
-          stroke="currentColor"
-          strokeOpacity="0.3"
+          stroke="var(--border)"
           strokeWidth="1"
         />
         <rect
-          x="248"
-          y="96"
-          width="84"
-          height="22"
+          x="258"
+          y="68"
+          width="94"
+          height="26"
+          rx="4"
+          fill="var(--bg)"
+          stroke="var(--border)"
+          strokeWidth="1"
+        />
+        <text
+          x="266"
+          y="84"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          Inventory Control
+        </text>
+        <rect
+          x="258"
+          y="102"
+          width="94"
+          height="26"
+          rx="4"
+          fill="var(--accent-muted)"
           stroke="var(--accent)"
           strokeWidth="1"
         />
+        <text
+          x="266"
+          y="118"
+          fill="var(--accent)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          Order Fulfillment
+        </text>
         <rect
-          x="248"
-          y="126"
-          width="84"
-          height="22"
-          stroke="currentColor"
-          strokeOpacity="0.3"
+          x="258"
+          y="136"
+          width="94"
+          height="26"
+          rx="4"
+          fill="var(--bg)"
+          stroke="var(--border)"
           strokeWidth="1"
         />
-        <rect
-          x="248"
-          y="156"
-          width="84"
-          height="20"
-          stroke="currentColor"
-          strokeOpacity="0.2"
-          strokeWidth="1"
-        />
+        <text
+          x="266"
+          y="152"
+          fill="var(--muted)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          Catalog Analytics
+        </text>
       </svg>
     );
   }
@@ -315,341 +487,413 @@ function SchematicIllustration({ slug }: { slug: string }) {
   if (slug === "daily-flow") {
     return (
       <svg
-        viewBox="0 0 360 220"
-        className="w-full h-full max-h-[76%] max-w-[82%] mx-auto"
+        viewBox="0 0 380 210"
+        className="w-full h-full max-h-[82%] max-w-[90%] mx-auto"
         fill="none"
         aria-hidden="true"
       >
-        {/* Mobile Device Outline */}
+        {/* Mobile Routine Tracker Screen */}
         <rect
-          x="40"
-          y="20"
-          width="110"
-          height="180"
-          rx="6"
-          stroke="currentColor"
-          strokeOpacity="0.55"
-          strokeWidth="1"
-        />
-        {/* Routine Header */}
-        <line
-          x1="56"
-          y1="36"
-          x2="100"
-          y2="36"
-          stroke="currentColor"
-          strokeOpacity="0.4"
+          x="28"
+          y="18"
+          width="132"
+          height="174"
+          rx="12"
+          fill="var(--surface)"
+          stroke="var(--accent)"
           strokeWidth="1.5"
         />
-        {/* 7-Day Streak Pills */}
-        <circle cx="56" cy="56" r="4" fill="var(--accent)" />
-        <circle cx="70" cy="56" r="4" fill="var(--accent)" />
-        <circle cx="84" cy="56" r="4" fill="var(--accent)" />
-        <circle cx="98" cy="56" r="4" fill="var(--accent)" />
-        <circle cx="112" cy="56" r="4" fill="var(--accent)" />
-        <circle cx="126" cy="56" r="4" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-        <circle cx="140" cy="56" r="4" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
+        <text
+          x="44"
+          y="40"
+          fill="var(--fg)"
+          fontSize="9"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
+        >
+          DAILY FLOW APP
+        </text>
+        {/* 7-Day Streak Row */}
+        <circle cx="48" cy="58" r="5" fill="#10B981" />
+        <circle cx="63" cy="58" r="5" fill="#10B981" />
+        <circle cx="78" cy="58" r="5" fill="#10B981" />
+        <circle cx="93" cy="58" r="5" fill="#10B981" />
+        <circle cx="108" cy="58" r="5" fill="var(--accent)" />
+        <circle cx="123" cy="58" r="5" stroke="var(--border)" strokeWidth="1.2" />
+        <circle cx="138" cy="58" r="5" stroke="var(--border)" strokeWidth="1.2" />
 
-        {/* Habit Cards */}
+        {/* Habit Check-in Rows */}
         <rect
-          x="52"
+          x="40"
           y="74"
-          width="86"
-          height="26"
-          rx="2"
+          width="108"
+          height="28"
+          rx="6"
+          fill="var(--accent-muted)"
           stroke="var(--accent)"
           strokeWidth="1"
+        />
+        <text
+          x="50"
+          y="91"
           fill="var(--accent)"
-          fillOpacity="0.1"
-        />
-        <circle cx="64" cy="87" r="4" fill="var(--accent)" />
-        <line x1="74" y1="87" x2="128" y2="87" stroke="var(--accent)" strokeWidth="1.2" />
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fontWeight="600"
+        >
+          ✓ Morning Study
+        </text>
 
         <rect
-          x="52"
-          y="108"
-          width="86"
-          height="26"
-          rx="2"
-          stroke="currentColor"
-          strokeOpacity="0.35"
+          x="40"
+          y="110"
+          width="108"
+          height="28"
+          rx="6"
+          fill="var(--bg)"
+          stroke="var(--border)"
           strokeWidth="1"
         />
-        <circle cx="64" cy="121" r="4" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-        <line x1="74" y1="121" x2="120" y2="121" stroke="currentColor" strokeOpacity="0.35" strokeWidth="1" />
+        <text
+          x="50"
+          y="127"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          ✓ Code Practice
+        </text>
 
         <rect
-          x="52"
-          y="142"
-          width="86"
-          height="26"
-          rx="2"
-          stroke="currentColor"
-          strokeOpacity="0.35"
+          x="40"
+          y="146"
+          width="108"
+          height="28"
+          rx="6"
+          fill="var(--bg)"
+          stroke="var(--border)"
           strokeWidth="1"
         />
-        <circle cx="64" cy="155" r="4" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-        <line x1="74" y1="155" x2="114" y2="155" stroke="currentColor" strokeOpacity="0.35" strokeWidth="1" />
+        <text
+          x="50"
+          y="163"
+          fill="var(--muted)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          ○ Evening Review
+        </text>
 
-        {/* Offline-First SQLite Cylinder Schematic on the Right */}
-        <g transform="translate(180, 40)">
-          <text x="18" y="10" fill="currentColor" fontSize="10" fontFamily="monospace" fillOpacity="0.8">
-            OFFLINE PERSISTENCE
-          </text>
-          {/* SQLite Database Cylinder */}
-          <ellipse cx="70" cy="40" rx="42" ry="14" stroke="var(--accent)" strokeWidth="1.2" />
-          <path
-            d="M28 40 V86 C28 94, 112 94, 112 86 V40"
-            stroke="var(--accent)"
-            strokeWidth="1.2"
-          />
-          <path
-            d="M28 63 C28 71, 112 71, 112 63"
-            stroke="var(--accent)"
-            strokeWidth="1"
-            strokeDasharray="2 2"
-          />
-          <text x="50" y="70" fill="var(--accent)" fontSize="9" fontFamily="monospace">
-            SQLite
-          </text>
+        {/* Connector to SQLite */}
+        <line
+          x1="160"
+          y1="105"
+          x2="202"
+          y2="105"
+          stroke="var(--accent)"
+          strokeWidth="1.5"
+          strokeDasharray="3 3"
+        />
+        <circle cx="181" cy="105" r="3" fill="var(--accent)" />
 
-          {/* Sync arrows */}
-          <path
-            d="M-15 70 C0 70, 10 70, 20 70"
-            stroke="currentColor"
-            strokeOpacity="0.5"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-          />
-          <circle cx="20" cy="70" r="3" fill="var(--accent)" />
+        {/* Right: Offline-First SQLite & Notifications */}
+        <rect
+          x="202"
+          y="34"
+          width="150"
+          height="64"
+          rx="10"
+          fill="var(--surface)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+        />
+        <text
+          x="216"
+          y="56"
+          fill="var(--accent)"
+          fontSize="9"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
+        >
+          OFFLINE-FIRST SQLITE
+        </text>
+        <text
+          x="216"
+          y="74"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          100% Local Persistence
+        </text>
+        <text
+          x="216"
+          y="88"
+          fill="var(--muted)"
+          fontSize="7.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          Zero-Latency Streaks
+        </text>
 
-          {/* Local notification badge */}
-          <rect
-            x="20"
-            y="114"
-            width="100"
-            height="26"
-            stroke="currentColor"
-            strokeOpacity="0.4"
-            strokeWidth="1"
-          />
-          <text x="28" y="130" fill="currentColor" fontSize="8" fontFamily="monospace" fillOpacity="0.7">
-            ALARM NOTIFICATION
-          </text>
-        </g>
+        <rect
+          x="202"
+          y="112"
+          width="150"
+          height="64"
+          rx="10"
+          fill="var(--surface)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+        />
+        <text
+          x="216"
+          y="134"
+          fill="#10B981"
+          fontSize="9"
+          fontFamily="ui-sans-serif, system-ui, sans-serif"
+          fontWeight="700"
+        >
+          SCHEDULED REMINDERS
+        </text>
+        <text
+          x="216"
+          y="152"
+          fill="var(--fg)"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+        >
+          Local Push Alerts
+        </text>
+        <text
+          x="216"
+          y="166"
+          fill="var(--muted)"
+          fontSize="7.5"
+          fontFamily="ui-monospace, monospace"
+        >
+          Daily Routine Prompts
+        </text>
       </svg>
     );
   }
 
   // 4. Coffee & Milk Tea Shop POS System
-  if (slug === "tea-pos-system") {
-    return (
-      <svg
-        viewBox="0 0 360 220"
-        className="w-full h-full max-h-[76%] max-w-[82%] mx-auto"
-        fill="none"
-        aria-hidden="true"
-      >
-        {/* POS Cashier Screen */}
-        <rect
-          x="30"
-          y="28"
-          width="190"
-          height="145"
-          rx="4"
-          stroke="currentColor"
-          strokeOpacity="0.55"
-          strokeWidth="1"
-        />
-        {/* Screen Stand */}
-        <path d="M100 173 L90 200 H160 L150 173" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-        <line x1="80" y1="200" x2="170" y2="200" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-
-        {/* Beverage Items Grid on Screen */}
-        {/* Item 1 - Selected Cup */}
-        <rect
-          x="42"
-          y="40"
-          width="46"
-          height="46"
-          rx="2"
-          stroke="var(--accent)"
-          strokeWidth="1.2"
-          fill="var(--accent)"
-          fillOpacity="0.1"
-        />
-        {/* Milk Tea Cup Shape */}
-        <path
-          d="M56 48 L58 72 H72 L74 48 Z"
-          stroke="var(--accent)"
-          strokeWidth="1"
-        />
-        <line x1="65" y1="44" x2="65" y2="52" stroke="var(--accent)" strokeWidth="1" />
-
-        {/* Item 2 */}
-        <rect
-          x="94"
-          y="40"
-          width="46"
-          height="46"
-          rx="2"
-          stroke="currentColor"
-          strokeOpacity="0.3"
-          strokeWidth="1"
-        />
-        <path d="M108 50 L110 72 H124 L126 50 Z" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-
-        {/* Item 3 */}
-        <rect
-          x="146"
-          y="40"
-          width="46"
-          height="46"
-          rx="2"
-          stroke="currentColor"
-          strokeOpacity="0.3"
-          strokeWidth="1"
-        />
-        <path d="M160 50 L162 72 H176 L178 50 Z" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-
-        {/* Customization Options Bar (Sweetness / Ice / Toppings) */}
-        <rect
-          x="42"
-          y="94"
-          width="150"
-          height="22"
-          stroke="currentColor"
-          strokeOpacity="0.3"
-          strokeWidth="1"
-        />
-        <text x="48" y="108" fill="currentColor" fontSize="7.5" fontFamily="monospace" fillOpacity="0.7">
-          OPT: SWEET 50% · ICE 70% · BOBA
-        </text>
-
-        {/* Checkout Button */}
-        <rect
-          x="42"
-          y="124"
-          width="150"
-          height="20"
-          fill="var(--accent)"
-          fillOpacity="0.2"
-          stroke="var(--accent)"
-          strokeWidth="1"
-        />
-        <text x="82" y="138" fill="var(--accent)" fontSize="8.5" fontFamily="monospace">
-          CHARGE &middot; $4.50
-        </text>
-
-        {/* Printed Receipt Tape on the Right */}
-        <g transform="translate(245, 20)">
-          <path
-            d="M0 0 H85 V175 L75 168 L65 175 L55 168 L45 175 L35 168 L25 175 L15 168 L5 175 L0 168 Z"
-            stroke="currentColor"
-            strokeOpacity="0.5"
-            strokeWidth="1"
-            fill="var(--bg)"
-          />
-          <line x1="12" y1="20" x2="73" y2="20" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1.2" />
-          <line x1="12" y1="36" x2="55" y2="36" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1" />
-          <line x1="60" y1="36" x2="73" y2="36" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1" />
-          <line x1="12" y1="52" x2="45" y2="52" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1" />
-          <line x1="60" y1="52" x2="73" y2="52" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1" />
-          <line x1="12" y1="68" x2="73" y2="68" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" strokeDasharray="2 2" />
-          <line x1="12" y1="84" x2="35" y2="84" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
-          <line x1="50" y1="84" x2="73" y2="84" stroke="var(--accent)" strokeWidth="1.5" />
-
-          {/* Barcode */}
-          <line x1="16" y1="110" x2="16" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1.5" />
-          <line x1="20" y1="110" x2="20" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1" />
-          <line x1="24" y1="110" x2="24" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="2.5" />
-          <line x1="30" y1="110" x2="30" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1" />
-          <line x1="34" y1="110" x2="34" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1.5" />
-          <line x1="38" y1="110" x2="38" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1" />
-          <line x1="44" y1="110" x2="44" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="2" />
-          <line x1="50" y1="110" x2="50" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1" />
-          <line x1="56" y1="110" x2="56" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1.5" />
-          <line x1="62" y1="110" x2="62" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="2" />
-          <line x1="68" y1="110" x2="68" y2="135" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1" />
-        </g>
-      </svg>
-    );
-  }
-
-  // Fallback
   return (
     <svg
-      viewBox="0 0 360 220"
-      className="w-full h-full max-h-[76%] max-w-[82%] mx-auto"
+      viewBox="0 0 380 210"
+      className="w-full h-full max-h-[82%] max-w-[90%] mx-auto"
       fill="none"
       aria-hidden="true"
     >
-      <circle
-        cx="72"
-        cy="110"
-        r="24"
-        stroke="currentColor"
-        strokeOpacity="0.55"
-        strokeWidth="1"
+      {/* Left: Cashier POS Ordering Screen */}
+      <rect
+        x="20"
+        y="24"
+        width="200"
+        height="162"
+        rx="10"
+        fill="var(--surface)"
+        stroke="var(--border)"
+        strokeWidth="1.5"
       />
-      <circle
-        cx="180"
-        cy="60"
-        r="20"
-        stroke="currentColor"
-        strokeOpacity="0.55"
-        strokeWidth="1"
-      />
-      <circle
-        cx="180"
-        cy="160"
-        r="20"
+      <text
+        x="34"
+        y="46"
+        fill="var(--fg)"
+        fontSize="9"
+        fontFamily="ui-sans-serif, system-ui, sans-serif"
+        fontWeight="700"
+      >
+        CASHIER POS TERMINAL
+      </text>
+      {/* Drink Grid */}
+      <rect
+        x="34"
+        y="56"
+        width="52"
+        height="38"
+        rx="6"
+        fill="var(--accent-muted)"
         stroke="var(--accent)"
         strokeWidth="1.2"
       />
-      <circle
-        cx="288"
-        cy="110"
-        r="28"
-        stroke="currentColor"
-        strokeOpacity="0.55"
+      <text
+        x="42"
+        y="78"
+        fill="var(--accent)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+        fontWeight="700"
+      >
+        Milk Tea
+      </text>
+
+      <rect
+        x="94"
+        y="56"
+        width="52"
+        height="38"
+        rx="6"
+        fill="var(--bg)"
+        stroke="var(--border)"
         strokeWidth="1"
       />
-      <line
-        x1="96"
-        y1="101"
-        x2="160"
-        y2="67"
-        stroke="currentColor"
-        strokeOpacity="0.25"
+      <text
+        x="106"
+        y="78"
+        fill="var(--fg)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+      >
+        Latte
+      </text>
+
+      <rect
+        x="154"
+        y="56"
+        width="52"
+        height="38"
+        rx="6"
+        fill="var(--bg)"
+        stroke="var(--border)"
         strokeWidth="1"
       />
-      <line
-        x1="96"
-        y1="119"
-        x2="160"
-        y2="153"
+      <text
+        x="164"
+        y="78"
+        fill="var(--fg)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+      >
+        Matcha
+      </text>
+
+      {/* Drink Modifiers */}
+      <rect
+        x="34"
+        y="104"
+        width="172"
+        height="26"
+        rx="5"
+        fill="var(--bg)"
+        stroke="var(--border)"
+        strokeWidth="1"
+      />
+      <text
+        x="42"
+        y="120"
+        fill="var(--fg)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+      >
+        Sugar: 50% · Ice: 70% · +Boba
+      </text>
+
+      {/* Checkout Button */}
+      <rect
+        x="34"
+        y="140"
+        width="172"
+        height="30"
+        rx="6"
+        fill="var(--accent)"
+      />
+      <text
+        x="68"
+        y="158"
+        fill="#FFFFFF"
+        fontSize="8.5"
+        fontFamily="ui-sans-serif, system-ui, sans-serif"
+        fontWeight="700"
+      >
+        CHECKOUT · $4.50 USD
+      </text>
+
+      {/* Right: Real-Time Receipt */}
+      <rect
+        x="240"
+        y="24"
+        width="118"
+        height="162"
+        rx="10"
+        fill="var(--surface)"
         stroke="var(--accent)"
-        strokeWidth="1.2"
+        strokeWidth="1.5"
       />
+      <text
+        x="256"
+        y="46"
+        fill="var(--accent)"
+        fontSize="8.5"
+        fontFamily="ui-sans-serif, system-ui, sans-serif"
+        fontWeight="700"
+      >
+        INSTANT RECEIPT
+      </text>
       <line
-        x1="200"
-        y1="67"
-        x2="260"
-        y2="99"
-        stroke="currentColor"
-        strokeOpacity="0.25"
+        x1="254"
+        y1="56"
+        x2="344"
+        y2="56"
+        stroke="var(--border)"
+        strokeWidth="1"
+        strokeDasharray="2 2"
+      />
+      <text
+        x="254"
+        y="76"
+        fill="var(--fg)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+      >
+        1x Milk Tea   $3.75
+      </text>
+      <text
+        x="254"
+        y="94"
+        fill="var(--muted)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+      >
+        + Boba Pearl  $0.75
+      </text>
+      <text
+        x="254"
+        y="112"
+        fill="var(--muted)"
+        fontSize="8"
+        fontFamily="ui-monospace, monospace"
+      >
+        + 50% Sweet   $0.00
+      </text>
+      <line
+        x1="254"
+        y1="126"
+        x2="344"
+        y2="126"
+        stroke="var(--border)"
         strokeWidth="1"
       />
-      <line
-        x1="200"
-        y1="153"
-        x2="260"
-        y2="121"
-        stroke="var(--accent)"
-        strokeWidth="1.2"
-      />
-      <circle cx="288" cy="110" r="4.5" fill="var(--accent)" />
+      <text
+        x="254"
+        y="146"
+        fill="#10B981"
+        fontSize="9"
+        fontFamily="ui-monospace, monospace"
+        fontWeight="700"
+      >
+        TOTAL: $4.50
+      </text>
+      <text
+        x="254"
+        y="168"
+        fill="var(--muted)"
+        fontSize="7.5"
+        fontFamily="ui-monospace, monospace"
+      >
+        React · Tailwind CSS
+      </text>
     </svg>
   );
 }
@@ -667,64 +911,73 @@ export function ProjectCoverVisual({
   imageClassName?: string;
   compact?: boolean;
 }) {
-  const [loaded, setLoaded] = useState(false);
-  const [failed, setFailed] = useState(false);
-
+  const [imageError, setImageError] = useState(false);
   const formattedIndex = String(index + 1).padStart(2, "0");
 
-  return (
-    <div
-      className={cn(
-        "relative w-full h-full overflow-hidden bg-surface select-none",
-        className
-      )}
-    >
-      {/* Editorial Gradient & Architectural Schematic Fallback Placeholder */}
+  if (project.image && !imageError) {
+    return (
       <div
         className={cn(
-          "absolute inset-0 flex flex-col justify-between bg-gradient-to-br p-4 sm:p-6 text-foreground transition-transform duration-700 ease-editorial",
-          project.accentColor || "from-neutral-500/15 via-neutral-500/5 to-transparent",
-          imageClassName
+          "relative w-full h-full overflow-hidden bg-[#070913] select-none group",
+          className
         )}
       >
-        {/* Top Plate Meta Bar */}
-        <div className="flex items-center justify-between border-b border-neutral-200/80 dark:border-neutral-800/80 pb-2.5 text-[10px] font-mono uppercase tracking-widest text-muted">
-          <span>Plate {formattedIndex}</span>
-          <span className="truncate max-w-[65%]">{project.category}</span>
-        </div>
-
-        {/* Center Schematic Diagram */}
-        <div className="my-auto flex items-center justify-center py-2">
-          <SchematicIllustration slug={project.slug} />
-        </div>
-
-        {/* Bottom Caption Bar */}
-        {!compact && (
-          <div className="flex items-center justify-between border-t border-neutral-200/80 dark:border-neutral-800/80 pt-2.5 text-[10px] font-mono uppercase tracking-widest text-muted">
-            <span className="truncate max-w-[75%]">
-              {project.techStack.slice(0, 3).join(" · ")}
-            </span>
-            <span>{project.year}</span>
-          </div>
-        )}
-      </div>
-
-      {/* Actual Cover Image (renders seamlessly when file exists) */}
-      {project.image && !failed && (
         <Image
           src={project.image}
           alt={project.title}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          onLoad={() => setLoaded(true)}
-          onError={() => setFailed(true)}
+          sizes="(max-width: 1024px) 100vw, 840px"
           className={cn(
-            "object-cover transition-all duration-700 ease-editorial",
-            loaded ? "opacity-100" : "opacity-0 pointer-events-none",
+            "object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105",
             imageClassName
           )}
+          onError={() => setImageError(true)}
         />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070913]/80 via-transparent to-transparent opacity-50" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative w-full h-full overflow-hidden bg-surface-elevated select-none",
+        className
       )}
+    >
+      <div
+        className={cn(
+          "absolute inset-0 flex flex-col justify-between bg-gradient-to-br from-surface via-surface-elevated to-background p-4 sm:p-5 text-foreground transition-transform duration-500 ease-editorial",
+          project.accentColor || "from-indigo-500/10 via-surface to-background",
+          imageClassName
+        )}
+      >
+        {/* Top Meta Bar */}
+        <div className="flex items-center justify-between border-b border-white/10 pb-2 text-xs font-mono text-muted-foreground">
+          <span className="flex items-center gap-1.5 font-semibold text-foreground">
+            <span className="h-2 w-2 rounded-full bg-cyan-400" />
+            <span>Project {formattedIndex}</span>
+          </span>
+          <span className="truncate max-w-[65%] text-muted-foreground font-medium">
+            {project.category}
+          </span>
+        </div>
+
+        {/* Center Architecture Diagram */}
+        <div className="my-auto flex items-center justify-center py-1">
+          <SchematicIllustration slug={project.slug} />
+        </div>
+
+        {/* Bottom Tech Bar */}
+        {!compact && (
+          <div className="flex items-center justify-between border-t border-white/10 pt-2 text-xs font-mono text-muted-foreground">
+            <span className="truncate max-w-[78%] text-cyan-400 font-semibold">
+              {project.techStack.slice(0, 4).join(" · ")}
+            </span>
+            <span className="text-foreground font-medium">{project.year}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

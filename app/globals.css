@@ -2,180 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light dark;
+@layer base {
+  :root {
+    /* Premium Cyber-Midnight Obsidian & Electric Cyan / Indigo Aurora */
+    --background: 228 35% 5.5%;
+    --background-light: 226 34% 9.5%;
+    --foreground: 210 40% 98%;
 
-  --bg-light: #F5F2EC;
-  --fg-light: #111111;
-  --muted-light: #52514D;
-  --border-light: #D9D5CC;
-  --accent-light: #B8321F;
-  --surface-light: #ECE8DF;
+    --card: 226 34% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 226 34% 8%;
+    --popover-foreground: 210 40% 98%;
 
-  --bg-dark: #0F0F0E;
-  --fg-dark: #EDEAE3;
-  --muted-dark: #A8A69E;
-  --border-dark: #282724;
-  --accent-dark: #E56350;
-  --surface-dark: #171715;
+    /* Primary: Electric Cyber Cyan */
+    --primary: 194 100% 50%;
+    --primary-foreground: 228 50% 6%;
 
-  --bg: var(--bg-light);
-  --fg: var(--fg-light);
-  --muted: var(--muted-light);
-  --border: var(--border-light);
-  --accent: var(--accent-light);
-  --surface: var(--surface-light);
+    /* Secondary: Royal Aurora Indigo */
+    --secondary: 252 95% 68%;
+    --secondary-foreground: 228 50% 6%;
 
-  accent-color: var(--accent);
-}
+    --muted: 225 28% 13%;
+    --muted-foreground: 217 20% 72%;
+    --accent: 252 95% 68%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 225 28% 16%;
+    --input: 225 28% 13%;
+    --ring: 194 100% 50%;
+    --radius: 0.75rem;
 
-@media (prefers-color-scheme: dark) {
-  :root:not(.light):not(:has(> head > meta[name="color-scheme"][content="light"])) {
-    --bg: var(--bg-dark);
-    --fg: var(--fg-dark);
-    --muted: var(--muted-dark);
-    --border: var(--border-dark);
-    --accent: var(--accent-dark);
-    --surface: var(--surface-dark);
+    /* Compatibility tokens for interactive modals/cards */
+    --bg: #070913;
+    --fg: #f8fafc;
+    --surface: #0e1322;
+    --surface-elevated: #141b30;
+    --surface-hover: #1b2440;
+    --border-subtle: #1e2744;
+    --border-glow: rgba(0, 242, 254, 0.35);
+    --accent-muted: rgba(0, 242, 254, 0.12);
+    --accent-hover: #38bdf8;
   }
 }
 
-:root.dark,
-:root:has(> head > meta[name="color-scheme"][content="dark"]) {
-  color-scheme: dark;
-  --bg: var(--bg-dark);
-  --fg: var(--fg-dark);
-  --muted: var(--muted-dark);
-  --border: var(--border-dark);
-  --accent: var(--accent-dark);
-  --surface: var(--surface-dark);
+@layer base {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-roboto-flex antialiased;
+    overflow-x: hidden;
+    background-color: #070913;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
 }
 
-:root.light,
-:root:has(> head > meta[name="color-scheme"][content="light"]) {
-  color-scheme: light;
-  --bg: var(--bg-light);
-  --fg: var(--fg-light);
-  --muted: var(--muted-light);
-  --border: var(--border-light);
-  --accent: var(--accent-light);
-  --surface: var(--surface-light);
-}
+@layer components {
+  .grid {
+    @apply gap-[25px];
+  }
 
-html {
-  background-color: var(--bg);
-  color: var(--fg);
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) var(--bg);
-}
+  .markdown-text ul {
+    @apply pl-5 mt-2 list-disc space-y-1.5;
+  }
 
-body {
-  background-color: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans), Inter, system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  /* Futuristic Glowing Elements */
+  .glow-cyan {
+    box-shadow: 0 0 40px rgba(0, 242, 254, 0.22);
+  }
 
-::selection {
-  background-color: var(--accent);
-  color: #F5F2EC;
-}
+  .glow-indigo {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.22);
+  }
 
-/* Editorial typography helpers */
-.project-title-serif {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
-  letter-spacing: -0.02em;
-}
+  .text-glow {
+    text-shadow: 0 0 20px rgba(0, 242, 254, 0.45);
+  }
 
-.editorial-label {
-  font-family: var(--font-sans), Inter, system-ui, sans-serif;
-  font-size: 0.72rem;
-  line-height: 1.4;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.editorial-prose {
-  font-size: clamp(0.9375rem, 1vw, 1.0625rem);
-  line-height: 1.6;
-  max-width: 65ch;
-}
-
-/* Underline-draw animation on link hover */
-.editorial-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: inherit;
-  text-decoration: none;
-  transition: color 300ms ease-out;
-}
-
-.editorial-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 1px;
-  background-color: var(--accent);
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.editorial-link:hover,
-.editorial-link:focus-visible {
-  color: var(--accent);
-}
-
-.editorial-link:hover::after,
-.editorial-link:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-
-/* Persistent underline link variant that redraws in accent on hover */
-.editorial-link-persistent {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--fg);
-  text-decoration: none;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--border);
-  transition: color 300ms ease-out, border-color 300ms ease-out;
-}
-
-.editorial-link-persistent::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  width: 100%;
-  height: 1px;
-  background-color: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.editorial-link-persistent:hover,
-.editorial-link-persistent:focus-visible {
-  color: var(--accent);
-}
-
-.editorial-link-persistent:hover::after,
-.editorial-link-persistent:focus-visible::after {
-  transform: scaleX(1);
+  .gradient-aurora {
+    background: linear-gradient(135deg, #00f2fe 0%, #38bdf8 40%, #818cf8 70%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 /* Native modal dialog scroll containment */
@@ -186,36 +104,15 @@ dialog:modal {
 dialog::backdrop {
   overflow: hidden;
   overscroll-behavior: contain;
-  background-color: rgba(15, 15, 14, 0.55);
+  background-color: rgba(7, 9, 19, 0.85);
+  backdrop-filter: blur(8px);
 }
 
-/* Native CSS Scrollspy */
+/* Native CSS Scrollspy per modern-web-guidance `scrollspy` */
 .scrollspy-nav {
   scroll-target-group: auto;
 }
 
 .scrollspy-nav a:is(:target-current, .\:target-current) {
-  color: var(--accent);
-}
-
-.scrollspy-nav a:is(:target-current, .\:target-current)::after {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-
-/* Customproperty-based reduced motion pattern per modern-web-guidance `motion` */
-@property --animation-reduced {
-  syntax: "*";
-  inherits: false;
-  initial-value: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: var(--animation-reduced) !important;
-    transition-duration: 0ms !important;
-    scroll-behavior: auto !important;
-  }
+  color: hsl(var(--primary));
 }

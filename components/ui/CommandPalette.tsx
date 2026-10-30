@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, CornerDownLeft, Search } from "lucide-react";
+import { ArrowUpRight, CornerDownLeft, Search, Sparkles } from "lucide-react";
 import { siteData } from "@/data/site";
 import { navigateToSection } from "@/components/ui/SectionTransition";
 
@@ -49,35 +49,35 @@ export function CommandPalette() {
     {
       id: "about",
       num: "01",
-      label: "About & Biography",
+      label: "About & Architecture",
       category: "Index",
       action: () => jumpTo("#about"),
     },
     {
       id: "skills",
       num: "02",
-      label: "Capabilities & Disciplines",
+      label: "Capabilities & Tech Stack",
       category: "Index",
       action: () => jumpTo("#skills"),
     },
     {
       id: "projects",
       num: "03",
-      label: "Selected Work",
+      label: "Featured Projects",
       category: "Index",
       action: () => jumpTo("#projects"),
     },
     {
       id: "experience",
       num: "04",
-      label: "Experience & Education",
+      label: "Experience & Milestones",
       category: "Index",
       action: () => jumpTo("#experience"),
     },
     {
       id: "contact",
       num: "05",
-      label: "Contact & Inquiries",
+      label: "Contact & Collaboration",
       category: "Index",
       action: () => jumpTo("#contact"),
     },
@@ -114,7 +114,7 @@ export function CommandPalette() {
     {
       id: "github",
       num: "—",
-      label: "GitHub Archive (github.com/Bunvathana876)",
+      label: "GitHub Profile (github.com/Bunvathana876)",
       category: "Direct",
       action: () => {
         closeDialog();
@@ -210,36 +210,38 @@ export function CommandPalette() {
       closedby="any"
       aria-labelledby="command-palette-title"
       onClose={() => setQuery("")}
-      className="m-auto w-[92vw] max-w-xl rounded-[2px] border border-border bg-background p-0 text-foreground focus:outline-none"
+      className="m-auto w-[92vw] max-w-xl rounded-2xl border border-border-subtle bg-surface/95 backdrop-blur-2xl p-0 text-foreground shadow-2xl focus:outline-none"
     >
       <div className="flex flex-col" onKeyDown={handleListKeyDown}>
         <h2 id="command-palette-title" className="sr-only">
-          Editorial Index Navigation
+          Command Palette Navigation
         </h2>
 
-        <div className="flex items-center gap-3 border-b border-border px-5 py-4">
-          <Search className="h-4 w-4 text-muted shrink-0" />
+        {/* Input Bar */}
+        <div className="flex items-center gap-3 border-b border-border-subtle px-5 py-4">
+          <Search className="h-4 w-4 text-accent shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search index, sections, or works..."
-            className="w-full bg-transparent text-sm text-foreground placeholder-muted focus:outline-none"
+            placeholder="Type a command, section, or project..."
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
           />
           <button
             type="button"
             onClick={closeDialog}
-            className="rounded-[2px] border border-border px-2 py-0.5 text-[11px] uppercase tracking-[0.14em] text-muted transition-colors hover:border-accent hover:text-accent"
+            className="rounded-md border border-border-subtle bg-background/60 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-muted transition-colors hover:border-accent hover:text-accent"
           >
             Esc
           </button>
         </div>
 
-        <div className="max-h-80 overflow-y-auto divide-y divide-border">
+        {/* Results List */}
+        <div className="max-h-80 overflow-y-auto divide-y divide-border-subtle/50">
           {filtered.length === 0 ? (
-            <p className="py-10 text-center text-sm text-muted">
-              No matching entries in index.
+            <p className="py-10 text-center text-sm font-mono text-muted">
+              No matching commands or projects found.
             </p>
           ) : (
             <ul role="listbox" aria-label="Directory entries">
@@ -253,19 +255,19 @@ export function CommandPalette() {
                       onClick={item.action}
                       className={`flex w-full items-center justify-between px-5 py-3 text-left text-sm transition-colors ${
                         isSelected
-                          ? "bg-surface text-accent"
-                          : "text-foreground hover:bg-surface"
+                          ? "bg-accent/15 text-accent"
+                          : "text-foreground hover:bg-surface-elevated"
                       }`}
                     >
-                      <div className="flex items-baseline gap-4 min-w-0">
-                        <span className="w-8 shrink-0 text-[11px] uppercase tracking-[0.14em] text-muted">
+                      <div className="flex items-baseline gap-3.5 min-w-0">
+                        <span className="w-7 shrink-0 font-mono text-xs text-muted tabular-nums">
                           {item.num}
                         </span>
                         <div className="truncate">
-                          <p className="truncate font-serif text-lg tracking-tight">
+                          <p className="truncate font-sans font-medium text-sm">
                             {item.label}
                           </p>
-                          <p className="editorial-label mt-0.5">
+                          <p className="text-[10px] font-mono uppercase tracking-wider text-muted mt-0.5">
                             {item.category}
                           </p>
                         </div>
@@ -291,9 +293,13 @@ export function CommandPalette() {
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-border bg-surface px-5 py-2.5">
-          <span className="editorial-label">↑↓ Navigate • ↵ Select</span>
-          <span className="editorial-label">{siteData.name} — Index</span>
+        {/* Footer Shortcut Bar */}
+        <div className="flex items-center justify-between border-t border-border-subtle bg-surface/50 px-5 py-2.5 text-[11px] font-mono text-muted">
+          <span>&uarr;&darr; Navigate &bull; &crarr; Select</span>
+          <span className="flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-accent" />
+            <span>{siteData.name}</span>
+          </span>
         </div>
       </div>
     </dialog>

@@ -96,8 +96,8 @@ export function SectionTransitionWrapper({
   return (
     <div className="relative">
       {showDivider && (
-        <div className="mx-auto max-w-[1320px] px-6 sm:px-10 lg:px-16">
-          <hr className="border-0 border-t border-border" />
+        <div className="mx-auto max-w-[1360px] px-6 sm:px-10 lg:px-14">
+          <hr className="border-0 border-t border-border-subtle" />
         </div>
       )}
       {children}
