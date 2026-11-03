@@ -1,225 +1,174 @@
 "use client";
 
-import React, { useRef } from "react";
-import dynamic from "next/dynamic";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
+import React from "react";
 import {
-  Calendar,
-  FileDown,
-  Globe,
   GraduationCap,
   MapPin,
-  Sparkles,
+  ShieldCheck,
+  Smartphone,
 } from "lucide-react";
 import { siteData } from "@/data/site";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
-import { sound } from "@/lib/sound";
-
-const Lanyard = dynamic(() => import("@/components/ui/Lanyard"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-2.5">
-      <div className="size-8 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin shadow-[0_0_15px_rgba(0,242,254,0.3)]" />
-      <span className="text-[11px] font-mono text-cyan-400/70 tracking-widest animate-pulse">
-        CALIBRATING 3D PASS...
-      </span>
-    </div>
-  ),
-});
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import { ScrollReveal, ScrollRevealItem, SectionAccentStroke } from "@/components/ui/ScrollReveal";
+import { AboutIdentityPass } from "@/components/sections/AboutIdentityPass";
 
 export function About() {
-  const container = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      gsap.fromTo(
-        ".slide-up-and-fade",
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.06,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: container.current,
-            start: "top 80%",
-            once: true,
-          },
-        }
-      );
-    },
-    { scope: container }
-  );
-
   return (
-    <section className="pb-section pt-20" id="about-me">
-      <div id="about" className="sr-only" aria-hidden="true" />
-      <div className="container" ref={container}>
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-thin mb-16 slide-up-and-fade leading-tight text-foreground">
-          I believe in clean architecture, writing structured code, and crafting responsive mobile &amp; web experiences tailored to real-world impact.
-        </h2>
+    <section id="about" className="py-24 md:py-32 relative">
+      {/* Backward-compatible legacy anchor */}
+      <div id="about-me" aria-hidden="true" className="sr-only" />
 
-        <div className="grid md:grid-cols-12 gap-10 items-start">
-          {/* Left Column: 3D Physics Lanyard Developer Pass Showcase */}
-          <div className="md:col-span-5 space-y-6">
-            <div className="slide-up-and-fade space-y-1.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/25 text-xs font-mono font-bold text-cyan-400 tracking-wider uppercase">
-                <Sparkles size={12} className="animate-pulse" />
-                <span>Interactive Developer Pass</span>
-              </span>
-              <p className="text-4xl sm:text-5xl font-anton tracking-wide text-foreground">
-                Hi, I&apos;m {siteData.name}.
-              </p>
-            </div>
+      {/* Subtle ambient lighting */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/3 -left-32 w-96 h-96 rounded-full bg-sky-500/[0.04] blur-[130px]"
+      />
 
-            {/* 3D Physics Lanyard Card Stage */}
-            <div className="slide-up-and-fade relative w-full max-w-[420px] h-[520px] rounded-3xl bg-gradient-to-b from-[#0c1124]/90 via-[#070a14]/90 to-[#04060c]/90 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col items-center">
-              {/* Subtle Cyan Spotlight Glow */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 w-60 h-60 rounded-full bg-cyan-400/15 blur-[80px]"
-              />
-
-              <div className="w-full h-full">
-                <Lanyard
-                  frontImage="/images/lanyard-front.png"
-                  backImage="/images/lanyard-back.png"
-                  strapImage="/images/lanyard-strap.png"
-                  cardColor="#070a14"
-                  strapColor="#090d1a"
-                  finish="holographic"
-                  metal="silver"
-                  size={0.64}
-                  strapLength={0.44}
-                  gravity={1.0}
-                  elasticity={0.55}
-                  damping={0.45}
-                  breeze={0.35}
-                  interactive={true}
-                  intro={true}
-                />
-              </div>
-
-              {/* Bottom Interactive Hint Pill */}
-              <div className="pointer-events-none absolute bottom-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#070a14]/90 backdrop-blur-md border border-white/10 text-[11px] font-mono text-cyan-400 shadow-md">
-                <Sparkles size={11} className="animate-pulse" />
-                <span>Drag badge to swing &bull; Click to flip</span>
-              </div>
-            </div>
-
-            <div className="slide-up-and-fade flex flex-wrap items-center gap-4 pt-1">
-              <a
-                href="/cv.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => sound.pop()}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-mono text-cyan-400 hover:text-white hover:bg-cyan-500/20 hover:border-cyan-400/40 transition-all shadow-sm"
-              >
-                <FileDown size={16} />
-                <span>Download Full CV (PDF)</span>
-              </a>
-            </div>
+      <div className="container relative z-10">
+        {/* Section Header with ScrollReveal */}
+        <ScrollReveal duration={0.5} yOffset={16} className="max-w-3xl mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-mono font-medium text-sky-400">
+            <span className="size-1.5 rounded-full bg-sky-400" />
+            <span>01 // ABOUT ME</span>
           </div>
 
-          {/* Right Column: Bio + Personal Info Grid */}
-          <div className="md:col-span-7 space-y-6">
-            <div className="text-base sm:text-lg text-muted-foreground max-w-[580px] space-y-4 leading-relaxed">
-              <p className="slide-up-and-fade">{siteData.bio}</p>
-              <p className="slide-up-and-fade">
-                My work spans cross-platform{" "}
-                <span className="text-cyan-400 font-semibold">
-                  Flutter &amp; Dart
-                </span>{" "}
-                mobile applications with offline-first{" "}
-                <span className="text-foreground font-semibold">SQLite</span>{" "}
-                persistence, responsive{" "}
-                <span className="text-indigo-300 font-semibold">
-                  React &amp; Next.js
-                </span>{" "}
-                web dashboards, and structured{" "}
-                <span className="text-foreground font-semibold">
-                  FastAPI &amp; PostgreSQL
-                </span>{" "}
-                backends containerized with{" "}
-                <span className="text-foreground font-semibold">
-                  Docker Compose
-                </span>
-                .
-              </p>
-            </div>
+          <SectionAccentStroke />
 
-            {/* Quick Facts Bento Cards */}
-            <div className="slide-up-and-fade pt-2 grid sm:grid-cols-2 gap-4 text-sm">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100 leading-tight">
+            Engineering purposeful software with clean code and modern architecture.
+          </h2>
+
+          <p className="text-slate-400 text-base sm:text-lg leading-relaxed pt-1">
+            Senior software development student at Norton University with a strong foundation in cross-platform mobile systems and full-stack web platforms.
+          </p>
+        </ScrollReveal>
+
+        {/* Two-Column Grid: Identity Card & 3D Lanyard (Left) + Bento Matrix (Right) */}
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Lightweight Developer Identity Pass & Interactive 3D Lanyard */}
+          <ScrollReveal
+            duration={0.55}
+            delay={0.05}
+            yOffset={20}
+            className="lg:col-span-5 space-y-6"
+          >
+            <AboutIdentityPass />
+          </ScrollReveal>
+
+          {/* Right Column: 4-Card Bento Matrix with Staggered Cascading Reveals */}
+          <ScrollReveal
+            staggerChildren={0.08}
+            delay={0.1}
+            className="lg:col-span-7 grid sm:grid-cols-2 gap-4 sm:gap-5"
+          >
+            {/* Card 1: Education */}
+            <ScrollRevealItem yOffset={16}>
               <SpotlightCard
-                spotlightColor="rgba(0, 242, 254, 0.1)"
-                className="p-4 rounded-xl bg-[#0c1020]/80 backdrop-blur-xl border border-white/10 hover:border-cyan-400/30 transition-all"
+                enableTilt={true}
+                spotlightColor="rgba(56, 189, 248, 0.1)"
+                className="h-full p-6 rounded-2xl border border-white/[0.08] bg-[#111827]/70 backdrop-blur-xl hover:border-sky-500/30 transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center gap-2 text-cyan-400 font-anton tracking-wider uppercase mb-1.5">
-                  <GraduationCap size={16} />
-                  <span>Education</span>
+                <div>
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-400/20 text-sky-400 mb-4">
+                    <GraduationCap size={18} />
+                  </div>
+                  <p className="font-mono text-xs uppercase tracking-wider text-sky-400 mb-1">
+                    Education
+                  </p>
+                  <h4 className="text-base font-semibold text-slate-100">
+                    {siteData.education.degree}
+                  </h4>
+                  <p className="text-xs text-slate-400 font-mono mt-1">
+                    {siteData.education.institution} &middot; {siteData.education.period}
+                  </p>
                 </div>
-                <p className="text-foreground font-medium">
-                  B.S. in Software Development
-                </p>
-                <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                  Norton University (2023 — 2026)
+                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
+                  Core coursework in cross-platform mobile systems, relational database modeling, algorithms, and software architecture.
                 </p>
               </SpotlightCard>
+            </ScrollRevealItem>
 
+            {/* Card 2: Development Focus */}
+            <ScrollRevealItem yOffset={16}>
               <SpotlightCard
-                spotlightColor="rgba(0, 242, 254, 0.1)"
-                className="p-4 rounded-xl bg-[#0c1020]/80 backdrop-blur-xl border border-white/10 hover:border-cyan-400/30 transition-all"
+                enableTilt={true}
+                spotlightColor="rgba(56, 189, 248, 0.1)"
+                className="h-full p-6 rounded-2xl border border-white/[0.08] bg-[#111827]/70 backdrop-blur-xl hover:border-sky-500/30 transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center gap-2 text-cyan-400 font-anton tracking-wider uppercase mb-1.5">
-                  <Globe size={16} />
-                  <span>Spoken Languages</span>
+                <div>
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-400/20 text-blue-400 mb-4">
+                    <Smartphone size={18} />
+                  </div>
+                  <p className="font-mono text-xs uppercase tracking-wider text-sky-400 mb-1">
+                    Development Focus
+                  </p>
+                  <h4 className="text-base font-semibold text-slate-100">
+                    Mobile &amp; Full-Stack Systems
+                  </h4>
+                  <p className="text-xs text-slate-400 font-mono mt-1">
+                    Flutter, React &middot; Next.js &middot; FastAPI
+                  </p>
                 </div>
-                <p className="text-foreground font-medium">
-                  Khmer (Native) &bull; English (Intermediate)
-                </p>
-                <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                  Bilingual EN/KM software &amp; collaboration
+                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
+                  Designing offline-first mobile apps using SQLite, paired with responsive web dashboards and typed Python/Node REST services.
                 </p>
               </SpotlightCard>
+            </ScrollRevealItem>
 
+            {/* Card 3: Engineering Approach */}
+            <ScrollRevealItem yOffset={16}>
               <SpotlightCard
-                spotlightColor="rgba(0, 242, 254, 0.1)"
-                className="p-4 rounded-xl bg-[#0c1020]/80 backdrop-blur-xl border border-white/10 hover:border-cyan-400/30 transition-all"
+                enableTilt={true}
+                spotlightColor="rgba(56, 189, 248, 0.1)"
+                className="h-full p-6 rounded-2xl border border-white/[0.08] bg-[#111827]/70 backdrop-blur-xl hover:border-sky-500/30 transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center gap-2 text-cyan-400 font-anton tracking-wider uppercase mb-1.5">
-                  <Calendar size={16} />
-                  <span>Date of Birth</span>
+                <div>
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 mb-4">
+                    <ShieldCheck size={18} />
+                  </div>
+                  <p className="font-mono text-xs uppercase tracking-wider text-sky-400 mb-1">
+                    Engineering Approach
+                  </p>
+                  <h4 className="text-base font-semibold text-slate-100">
+                    Clean &amp; Maintainable Code
+                  </h4>
+                  <p className="text-xs text-slate-400 font-mono mt-1">
+                    Strict Typing &middot; Docker &middot; Modularity
+                  </p>
                 </div>
-                <p className="text-foreground font-medium">
-                  {siteData.socials.dateOfBirth || "17 December 2005"}
-                </p>
-                <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                  Cambodian Nationality
+                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
+                  Emphasizing decoupled state management, reusable component structures, containerized environments, and reproducible builds.
                 </p>
               </SpotlightCard>
+            </ScrollRevealItem>
 
+            {/* Card 4: Location & Communication */}
+            <ScrollRevealItem yOffset={16}>
               <SpotlightCard
-                spotlightColor="rgba(0, 242, 254, 0.1)"
-                className="p-4 rounded-xl bg-[#0c1020]/80 backdrop-blur-xl border border-white/10 hover:border-cyan-400/30 transition-all"
+                enableTilt={true}
+                spotlightColor="rgba(56, 189, 248, 0.1)"
+                className="h-full p-6 rounded-2xl border border-white/[0.08] bg-[#111827]/70 backdrop-blur-xl hover:border-sky-500/30 transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center gap-2 text-cyan-400 font-anton tracking-wider uppercase mb-1.5">
-                  <MapPin size={16} />
-                  <span>Location</span>
+                <div>
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-400/20 text-indigo-400 mb-4">
+                    <MapPin size={18} />
+                  </div>
+                  <p className="font-mono text-xs uppercase tracking-wider text-sky-400 mb-1">
+                    Location &amp; Spoken Languages
+                  </p>
+                  <h4 className="text-base font-semibold text-slate-100">
+                    Phnom Penh, Cambodia
+                  </h4>
+                  <p className="text-xs text-slate-400 font-mono mt-1">
+                    Khmer (Native) &bull; English (Working)
+                  </p>
                 </div>
-                <p className="text-foreground font-medium">
-                  Khan Tuol Kouk, Phnom Penh
-                </p>
-                <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                  Sangkat Tuek L&apos;ak Ti Pir, Cambodia
+                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
+                  Tuol Kouk district. Available for engineering roles locally in Cambodia and international remote collaboration.
                 </p>
               </SpotlightCard>
-            </div>
-          </div>
+            </ScrollRevealItem>
+          </ScrollReveal>
         </div>
       </div>
     </section>

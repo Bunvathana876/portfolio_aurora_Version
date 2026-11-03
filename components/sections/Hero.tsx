@@ -1,59 +1,125 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { clsx } from "clsx";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
-import { ArrowRight, Check, Code2, Copy, FileDown, Layers, MapPin, Smartphone, Sparkles } from "lucide-react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  FileDown,
+  Github,
+  GraduationCap,
+  Linkedin,
+  MapPin,
+  Smartphone,
+} from "lucide-react";
 import { siteData } from "@/data/site";
-import { ArrowAnimation } from "@/components/ui/ArrowAnimation";
-import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
-import { sound } from "@/lib/sound";
+import { MagneticButton } from "@/components/ui/MagneticButton";
+import { HeroGradientWaves } from "@/components/sections/HeroGradientWaves";
+import { TechText } from "@/components/ui/TechText";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: [0.21, 0.47, 0.32, 0.98],
+    },
+  },
+};
 
 export function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const portraitRef = useRef<HTMLDivElement>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const heroRef = useRef<HTMLElement>(null);
   const { toast } = useToast();
+  const shouldReduceMotion = useReducedMotion();
 
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "bottom 70%",
-          end: "bottom 10%",
-          scrub: 1,
-        },
-      });
+  // Pointer-responsive subtle depth on desktop
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 25, stiffness: 120, mass: 0.2 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
 
-      tl.fromTo(
-        ".slide-up-and-fade",
-        { y: 0 },
-        { y: -120, opacity: 0, stagger: 0.02 }
-      );
-    },
-    { scope: containerRef }
-  );
+  // Layered depth transforms
+  const portraitDepthX = useTransform(smoothMouseX, (v) => v * 0.7);
+  const portraitDepthY = useTransform(smoothMouseY, (v) => v * 0.7);
+  const badgeDepthX = useTransform(smoothMouseX, (v) => v * 1.6);
+  const badgeDepthY = useTransform(smoothMouseY, (v) => v * 1.6);
+  const orbitalDepthX = useTransform(smoothMouseX, (v) => v * -0.5);
+  const orbitalDepthY = useTransform(smoothMouseY, (v) => v * -0.5);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!portraitRef.current) return;
-    const rect = portraitRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMouseOffset({ x, y });
+  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
+    if (shouldReduceMotion || typeof window === "undefined") return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const relX = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+    const relY = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+    mouseX.set(relX * 10);
+    mouseY.set(relY * 10);
   };
+
+  const handlePointerLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  // Performance Safeguard: Pause decorative continuous animations when hero is offscreen or page is hidden
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsHeroVisible(false);
+      } else if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        setIsHeroVisible(rect.bottom > 0 && rect.top < window.innerHeight);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   const handleCopyEmail = async () => {
     try {
-      sound.success();
       await navigator.clipboard.writeText(siteData.socials.email);
       setCopiedEmail(true);
       toast({
@@ -63,7 +129,6 @@ export function Hero() {
       });
       setTimeout(() => setCopiedEmail(false), 2400);
     } catch {
-      sound.tick();
       toast({
         title: "Email address",
         description: siteData.socials.email,
@@ -72,207 +137,405 @@ export function Hero() {
     }
   };
 
+  const floatingStyle: React.CSSProperties = {
+    animationPlayState: isHeroVisible && !shouldReduceMotion ? "running" : "paused",
+  };
+
   return (
-    <section className="relative overflow-hidden" id="banner">
-      <div id="hero" className="sr-only" aria-hidden="true" />
-      <ArrowAnimation />
+    <section
+      ref={heroRef}
+      id="hero"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className="relative min-h-[calc(100svh-4rem)] pt-28 sm:pt-32 md:pt-36 pb-16 md:pb-24 flex items-center overflow-hidden"
+    >
+      {/* Legacy anchor compatibility */}
+      <div id="banner" aria-hidden="true" className="sr-only" />
 
-      {/* Atmospheric Spatial Aurora Glows */}
+      {/* Animated Gradient Waves Background */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-32 left-1/4 h-[520px] w-[520px] rounded-full bg-cyan-500/12 blur-[150px]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-20 right-1/4 h-[480px] w-[480px] rounded-full bg-indigo-500/15 blur-[150px]"
-      />
-
-      <div
-        className="container min-h-[100svh] pt-24 pb-16 md:py-20 flex justify-between items-center max-lg:flex-col gap-10"
-        ref={containerRef}
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
-        {/* Left: Giant Aurora Typography + Bio + CTAs */}
-        <div className="max-lg:grow flex flex-col justify-center items-start max-w-[580px] z-[1]">
-          {/* Eyebrow Badge */}
-          <div className="slide-up-and-fade flex flex-wrap items-center gap-2.5 mb-5">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0d1326]/80 backdrop-blur-xl border border-white/10 text-xs text-muted-foreground shadow-sm">
-              <span className="size-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#00f2fe]" />
-              <span className="text-foreground font-medium">Available for Software Developer Roles</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-              <MapPin size={13} className="text-cyan-400" />
-              <span>Phnom Penh, Cambodia</span>
-            </span>
-          </div>
+        <HeroGradientWaves isPaused={!isHeroVisible} />
+      </div>
 
-          {/* Primary Aurora Headline */}
-          <h1 className="banner-title slide-up-and-fade leading-[.95] text-6xl sm:text-[84px] font-anton uppercase tracking-tight">
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(0,242,254,0.35)]">
-              MOBILE &amp; WEB
-            </span>
-            <br />
-            <span className="ml-2 sm:ml-4 text-foreground">DEVELOPER</span>
-          </h1>
+      {/* Subtle Ambient Spatial Glows */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-24 right-1/4 h-[440px] w-[440px] rounded-full bg-sky-500/[0.06] blur-[140px] z-0"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/3 -left-20 h-[400px] w-[400px] rounded-full bg-blue-600/[0.05] blur-[130px] z-0"
+      />
 
-          {/* Bio */}
-          <p className="banner-description slide-up-and-fade mt-6 text-lg text-muted-foreground leading-relaxed">
-            Hi! I&apos;m{" "}
-            <span className="font-semibold text-foreground">{siteData.name}</span>
-            . A Software Developer and senior student pursuing a{" "}
-            <span className="font-medium text-foreground">
-              B.S. in Software Development
-            </span>{" "}
-            at{" "}
-            <span className="font-medium text-foreground">
-              Norton University (2023–2026)
-            </span>
-            . I specialize in cross-platform mobile engineering with{" "}
-            <span className="font-medium text-cyan-400">
-              Flutter &amp; Dart
-            </span>{" "}
-            and robust full-stack web software with{" "}
-            <span className="font-medium text-indigo-300">
-              React, Next.js, and FastAPI
-            </span>
-            .
-          </p>
-
-          {/* Action Buttons */}
-          <div className="slide-up-and-fade mt-8 flex flex-wrap items-center gap-4">
-            <a
-              href="#selected-projects"
-              onClick={() => sound.pop()}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 hover:from-cyan-300 hover:to-indigo-400 text-slate-950 font-anton text-base tracking-wider shadow-[0_0_30px_rgba(0,242,254,0.35)] hover:shadow-[0_0_40px_rgba(0,242,254,0.55)] transition-all duration-300 group cursor-pointer"
-            >
-              <span>Explore Projects</span>
-              <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-
-            <a
-              href="/cv.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => sound.pop()}
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl border border-white/10 bg-[#0d1326]/70 backdrop-blur-xl hover:bg-[#121a35] hover:border-cyan-400/50 text-foreground font-anton text-base tracking-wider transition-all duration-300 shadow-sm"
-            >
-              <FileDown size={17} className="text-cyan-400" />
-              <span>Resume PDF</span>
-            </a>
-          </div>
-
-          {/* Email Copy Pill */}
-          <div className="slide-up-and-fade flex flex-wrap items-center gap-4 mt-6">
-            <button
-              type="button"
-              onClick={handleCopyEmail}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0d1326]/60 backdrop-blur-md border border-white/10 text-xs font-mono text-muted-foreground hover:text-cyan-400 hover:border-cyan-400/40 transition-all cursor-pointer"
-            >
-              {copiedEmail ? (
-                <>
-                  <Check size={14} className="text-emerald-400" />
-                  <span className="text-emerald-400 font-medium">Email Copied to Clipboard!</span>
-                </>
-              ) : (
-                <>
-                  <Copy size={14} className="text-cyan-400" />
-                  <span>{siteData.socials.email}</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Center/Right: Free-Standing Big Studio Portrait + 3D Tilt + Floating Liquid Glass Badges */}
-        <div
-          ref={portraitRef}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => {
-            setIsHovering(false);
-            setMouseOffset({ x: 0, y: 0 });
-          }}
-          className="relative flex items-center justify-center z-[1] select-none"
-        >
-          {/* Ambient Cyan Halo Behind Silhouette */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 sm:w-[420px] sm:h-[420px] lg:w-[480px] lg:h-[480px] rounded-full bg-cyan-400/22 blur-[110px] transition-transform duration-700"
-            style={{
-              transform: isHovering
-                ? `translate(calc(-50% + ${mouseOffset.x * 25}px), calc(-50% + ${mouseOffset.y * 25}px))`
-                : "translate(-50%, -50%)",
-            }}
-          />
-
-          {/* Ambient Indigo Rim Light */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 sm:w-[360px] sm:h-[360px] lg:w-[420px] lg:h-[420px] rounded-full bg-indigo-500/25 blur-[95px]"
-          />
-
-          {/* Floating Liquid Glass Badge Top-Right */}
-          <div
-            className="hidden sm:flex absolute -top-4 -right-4 z-[3] items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#0c1122]/85 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-transform duration-500 pointer-events-none"
-            style={{
-              transform: isHovering
-                ? `translate3d(${mouseOffset.x * -12}px, ${mouseOffset.y * -12}px, 0)`
-                : "translate3d(0, 0, 0)",
-            }}
+      <div className="container relative z-10">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Role Headline, Bio, CTAs & Channels (Cinematic Motion) */}
+          <motion.div
+            variants={containerVariants}
+            initial={shouldReduceMotion ? false : "hidden"}
+            animate="visible"
+            className="lg:col-span-7 flex flex-col items-start max-w-2xl"
           >
-            <div className="flex size-7 items-center justify-center rounded-lg bg-cyan-400/15 border border-cyan-400/30 text-cyan-400">
-              <Smartphone size={14} />
-            </div>
-            <div>
-              <p className="text-[11px] font-mono font-bold text-foreground">Flutter &middot; Dart</p>
-              <p className="text-[10px] font-mono text-muted-foreground">Cross-Platform Mobile</p>
-            </div>
-          </div>
+            {/* Status & Location Pill */}
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-2.5 mb-4">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111827]/80 backdrop-blur-md border border-white/[0.08] text-xs text-slate-300 shadow-sm">
+                <span className="size-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                <span className="font-medium text-slate-200">
+                  Available for Opportunities
+                </span>
+              </span>
 
-          {/* Floating Liquid Glass Badge Bottom-Left */}
-          <div
-            className="hidden sm:flex absolute bottom-8 -left-8 z-[3] items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#0c1122]/85 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-transform duration-500 pointer-events-none"
-            style={{
-              transform: isHovering
-                ? `translate3d(${mouseOffset.x * -16}px, ${mouseOffset.y * -16}px, 0)`
-                : "translate3d(0, 0, 0)",
-            }}
-          >
-            <div className="flex size-7 items-center justify-center rounded-lg bg-emerald-400/15 border border-emerald-400/30 text-emerald-400">
-              <Layers size={14} />
-            </div>
-            <div>
-              <p className="text-[11px] font-mono font-bold text-foreground">Norton University</p>
-              <p className="text-[10px] font-mono text-muted-foreground">B.S. Software Dev &middot; 2026</p>
-            </div>
-          </div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs font-mono text-slate-400">
+                <MapPin size={12} className="text-sky-400" />
+                <span>Phnom Penh, Cambodia</span>
+              </span>
+            </motion.div>
 
-          {/* Free-Standing Cutout Container with Edge Fade Mask */}
-          <div
-            className="slide-up-and-fade relative w-[320px] sm:w-[440px] lg:w-[500px] xl:w-[560px] h-[460px] sm:h-[560px] lg:h-[640px] xl:h-[700px] flex items-end justify-center select-none"
-            style={{
-              maskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
-            }}
+            {/* Tasteful Precision Accent Line */}
+            <motion.div
+              initial={shouldReduceMotion ? false : { scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.75, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="origin-left h-[2px] w-24 bg-gradient-to-r from-sky-400 via-sky-300 to-transparent rounded-full animate-laser mb-4"
+            />
+
+            {/* Primary Value-Focused Headline with Interactive TechText */}
+            <motion.h1
+              variants={itemVariants}
+              className="w-full text-slate-100"
+            >
+              <span className="sr-only">Software Developer</span>
+              <div className="w-full h-[72px] sm:h-[95px] lg:h-[115px] relative -ml-1 sm:-ml-2">
+                <TechText
+                  text="Software Developer"
+                  align="left"
+                  fontWeight={700}
+                  fontSize={72}
+                  color="#f8fafc"
+                  accentColor="#38bdf8"
+                  dashLength={4}
+                  dashGap={2}
+                  strokeWidth={1.5}
+                  specks={15}
+                  reveal="letter"
+                  clickKick={true}
+                  draggable={true}
+                  bounce={0.4}
+                  sweep={true}
+                  speed={0.8}
+                  guides={false}
+                />
+              </div>
+            </motion.h1>
+
+            {/* Concise Professional Bio */}
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed"
+            >
+              Hi, I&apos;m{" "}
+              <span className="font-semibold text-slate-200">
+                {siteData.name}
+              </span>
+              . A Software Developer and senior student pursuing a{" "}
+              <span className="text-slate-200 font-medium">
+                B.S. in Software Development
+              </span>{" "}
+              at{" "}
+              <span className="text-slate-200 font-medium">
+                Norton University (2023–2026)
+              </span>
+              . I specialize in cross-platform mobile engineering with{" "}
+              <span className="text-sky-400 font-medium">Flutter &amp; Dart</span>{" "}
+              and robust full-stack web systems with{" "}
+              <span className="text-sky-300 font-medium">
+                React, Next.js, and FastAPI
+              </span>
+              .
+            </motion.p>
+
+            {/* Primary Actions with Magnetic CTA Buttons */}
+            <motion.div variants={itemVariants} className="mt-8 flex flex-wrap items-center gap-3.5">
+              <MagneticButton strength={0.2}>
+                <a
+                  href="#projects"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-600 hover:from-sky-300 hover:to-blue-500 text-slate-950 font-semibold text-sm tracking-wide shadow-[0_0_24px_rgba(56,189,248,0.25)] hover:shadow-[0_0_32px_rgba(56,189,248,0.4)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all duration-200 group cursor-pointer"
+                >
+                  <span>View Projects</span>
+                  <ArrowRight
+                    size={15}
+                    className="transition-transform duration-200 group-hover:translate-x-[3px]"
+                  />
+                </a>
+              </MagneticButton>
+
+              <MagneticButton strength={0.14}>
+                <a
+                  href="/cv.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl border border-white/[0.1] bg-[#111827]/60 hover:bg-[#111827] hover:border-sky-400/40 text-slate-200 font-medium text-sm active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all duration-200 shadow-sm"
+                >
+                  <FileDown size={15} className="text-sky-400" />
+                  <span>Download CV (PDF)</span>
+                </a>
+              </MagneticButton>
+            </motion.div>
+
+            {/* Quick Contact Pill & Verified Socials */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-8 pt-6 border-t border-white/[0.08] w-full flex flex-wrap items-center justify-between gap-4"
+            >
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-sky-400/40 text-xs font-mono text-slate-400 hover:text-sky-300 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all cursor-pointer"
+              >
+                {copiedEmail ? (
+                  <>
+                    <Check size={13} className="text-emerald-400" />
+                    <span className="text-emerald-400 font-sans font-medium">
+                      Copied to clipboard
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={13} className="text-sky-400" />
+                    <span>{siteData.socials.email}</span>
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center gap-2">
+                {siteData.socials.github && (
+                  <a
+                    href={siteData.socials.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub Profile"
+                    className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-sky-400/40 text-slate-400 hover:text-white active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all"
+                  >
+                    <Github size={15} />
+                  </a>
+                )}
+
+                {siteData.socials.linkedin && (
+                  <a
+                    href={siteData.socials.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn Profile"
+                    className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-sky-400/40 text-slate-400 hover:text-white active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all"
+                  >
+                    <Linkedin size={15} />
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Column: Clean Portrait Presentation with Multi-Plane Depth & Dual Orbital Calibration Rings */}
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 16, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="lg:col-span-5 flex justify-center lg:justify-end relative preserve-3d"
           >
-            <div
-              className="relative w-full h-full transition-transform duration-700 ease-out"
+            {/* 3D Isometric Coordinate Accent with Dual Concentric Calibration Rings */}
+            <motion.div
+              aria-hidden="true"
               style={{
-                transform: isHovering
-                  ? `translate3d(${mouseOffset.x * 12}px, ${mouseOffset.y * 12}px, 0) scale(1.02)`
-                  : "translate3d(0, 0, 0) scale(1)",
+                ...floatingStyle,
+                x: orbitalDepthX,
+                y: orbitalDepthY,
               }}
+              className="pointer-events-none absolute -top-10 -left-10 sm:-top-12 sm:-left-12 z-20 w-32 h-32 sm:w-36 sm:h-36 opacity-80 animate-float-slow"
             >
-              <Image
-                src="/images/hero-cutout.png"
-                alt={siteData.name}
-                fill
-                priority
-                unoptimized
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 560px"
-                className="object-contain object-bottom drop-shadow-[0_25px_50px_rgba(0,0,0,0.7)] select-none pointer-events-none"
+              <svg
+                viewBox="0 0 140 140"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-full h-full drop-shadow-[0_0_18px_rgba(56,189,248,0.28)]"
+              >
+                <defs>
+                  <linearGradient id="cube-grad-top" x1="70" y1="28" x2="70" y2="70" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#38BDF8" stopOpacity="0.32" />
+                    <stop stopColor="#38BDF8" stopOpacity="0.06" />
+                  </linearGradient>
+                  <linearGradient id="cube-grad-left" x1="34" y1="50" x2="70" y2="112" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#2563EB" stopOpacity="0.25" />
+                    <stop stopColor="#2563EB" stopOpacity="0.04" />
+                  </linearGradient>
+                  <linearGradient id="cube-grad-right" x1="106" y1="50" x2="70" y2="112" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#38BDF8" stopOpacity="0.20" />
+                    <stop stopColor="#2563EB" stopOpacity="0.06" />
+                  </linearGradient>
+                </defs>
+
+                {/* Outer Rotating Calibration Ring (Clockwise) */}
+                <circle
+                  cx="70"
+                  cy="70"
+                  r="56"
+                  stroke="#38BDF8"
+                  strokeOpacity="0.25"
+                  strokeWidth="1"
+                  strokeDasharray="4 8"
+                  style={floatingStyle}
+                  className="animate-rotate-slow origin-center"
+                />
+
+                {/* Inner Counter-Rotating Reticle Ring (Counter-Clockwise) */}
+                <circle
+                  cx="70"
+                  cy="70"
+                  r="44"
+                  stroke="#2563EB"
+                  strokeOpacity="0.22"
+                  strokeWidth="1"
+                  strokeDasharray="2 6"
+                  style={floatingStyle}
+                  className="animate-rotate-reverse-slow origin-center"
+                />
+
+                {/* Angle Reticle Ticks */}
+                <line x1="70" y1="10" x2="70" y2="18" stroke="#38BDF8" strokeOpacity="0.6" strokeWidth="1" />
+                <line x1="70" y1="122" x2="70" y2="130" stroke="#38BDF8" strokeOpacity="0.6" strokeWidth="1" />
+                <line x1="10" y1="70" x2="18" y2="70" stroke="#38BDF8" strokeOpacity="0.6" strokeWidth="1" />
+                <line x1="122" y1="70" x2="130" y2="70" stroke="#38BDF8" strokeOpacity="0.6" strokeWidth="1" />
+
+                {/* Isometric Cube Faces */}
+                {/* Top Face */}
+                <polygon
+                  points="70,32 104,51 70,70 36,51"
+                  fill="url(#cube-grad-top)"
+                  stroke="#38BDF8"
+                  strokeOpacity="0.65"
+                  strokeWidth="1.2"
+                />
+                {/* Left Face */}
+                <polygon
+                  points="36,51 70,70 70,108 36,89"
+                  fill="url(#cube-grad-left)"
+                  stroke="#38BDF8"
+                  strokeOpacity="0.5"
+                  strokeWidth="1.2"
+                />
+                {/* Right Face */}
+                <polygon
+                  points="70,70 104,51 104,89 70,108"
+                  fill="url(#cube-grad-right)"
+                  stroke="#2563EB"
+                  strokeOpacity="0.55"
+                  strokeWidth="1.2"
+                />
+
+                {/* Internal Wireframe Axis Lines */}
+                <line x1="70" y1="70" x2="70" y2="32" stroke="#38BDF8" strokeOpacity="0.8" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="70" y1="70" x2="36" y2="89" stroke="#38BDF8" strokeOpacity="0.6" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="70" y1="70" x2="104" y2="89" stroke="#38BDF8" strokeOpacity="0.6" strokeWidth="1" strokeDasharray="2 2" />
+
+                {/* Center Coordinate Vertex */}
+                <circle cx="70" cy="70" r="2.5" fill="#38BDF8" />
+                <circle cx="70" cy="70" r="6" stroke="#38BDF8" strokeOpacity="0.45" strokeWidth="1" />
+
+                {/* Outer Vertex Nodes */}
+                <circle cx="70" cy="32" r="2" fill="#38BDF8" fillOpacity="0.95" />
+                <circle cx="104" cy="51" r="2" fill="#38BDF8" fillOpacity="0.95" />
+                <circle cx="36" cy="51" r="2" fill="#38BDF8" fillOpacity="0.95" />
+                <circle cx="70" cy="108" r="2" fill="#38BDF8" fillOpacity="0.95" />
+              </svg>
+            </motion.div>
+
+            {/* Portrait Container with Pointer-Responsive Depth */}
+            <motion.div
+              style={{
+                x: portraitDepthX,
+                y: portraitDepthY,
+              }}
+              className="relative w-full max-w-[360px] sm:max-w-[420px] aspect-[4/5] rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#111827]/80 via-[#0e1424]/80 to-[#090D16]/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex items-end justify-center select-none group"
+            >
+              {/* Subtle Blue Rim Atmosphere */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-sky-500/[0.12] blur-[80px]"
               />
-            </div>
-          </div>
+
+              {/* Spatial Blueprint Grid Pattern */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]"
+              />
+
+              {/* Floating Discipline Badge (Top Right) with Multi-Plane Depth */}
+              <motion.div
+                style={{
+                  ...floatingStyle,
+                  x: badgeDepthX,
+                  y: badgeDepthY,
+                }}
+                className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#090D16]/90 backdrop-blur-md border border-white/[0.08] shadow-lg pointer-events-none animate-float"
+              >
+                <div className="flex size-6 items-center justify-center rounded-md bg-sky-500/15 border border-sky-400/30 text-sky-400">
+                  <Smartphone size={12} />
+                </div>
+                <div>
+                  <p className="text-[11px] font-mono font-semibold text-slate-200 leading-tight">
+                    Flutter &middot; Dart
+                  </p>
+                  <p className="text-[10px] font-mono text-slate-400 leading-tight">
+                    Cross-Platform Mobile
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Floating Academic Credential Badge (Bottom Left) with Multi-Plane Depth */}
+              <motion.div
+                style={{
+                  ...floatingStyle,
+                  x: badgeDepthX,
+                  y: badgeDepthY,
+                }}
+                className="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#090D16]/90 backdrop-blur-md border border-white/[0.08] shadow-lg pointer-events-none animate-float-delayed"
+              >
+                <div className="flex size-6 items-center justify-center rounded-md bg-emerald-500/15 border border-emerald-400/30 text-emerald-400">
+                  <GraduationCap size={12} />
+                </div>
+                <div>
+                  <p className="text-[11px] font-mono font-semibold text-slate-200 leading-tight">
+                    Norton University
+                  </p>
+                  <p className="text-[10px] font-mono text-slate-400 leading-tight">
+                    B.S. Software Dev &middot; 2026
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Optimized Portrait Silhouette with Soft Edge Fade Mask */}
+              <div
+                className="relative w-full h-[90%] flex items-end justify-center"
+                style={{
+                  maskImage:
+                    "linear-gradient(to bottom, black 86%, transparent 100%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, black 86%, transparent 100%)",
+                }}
+              >
+                <Image
+                  src="/images/hero-cutout.webp"
+                  alt={siteData.name}
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 340px, (max-width: 1024px) 420px, 460px"
+                  className="object-contain object-bottom transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

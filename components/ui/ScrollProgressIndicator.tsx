@@ -3,38 +3,31 @@
 import React, { useEffect, useRef } from "react";
 
 export const ScrollProgressIndicator = () => {
-  const scrollBarRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (scrollBarRef.current) {
-        const { scrollHeight, clientHeight } = document.documentElement;
-        const scrollableHeight = scrollHeight - clientHeight;
-        const scrollY = window.scrollY;
-        const scrollProgress =
-          scrollableHeight > 0 ? (scrollY / scrollableHeight) * 100 : 0;
-
-        scrollBarRef.current.style.transform = `translateY(-${
-          100 - scrollProgress
-        }%)`;
-      }
+      if (!barRef.current) return;
+      const { scrollHeight, clientHeight } = document.documentElement;
+      const scrollable = scrollHeight - clientHeight;
+      const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+      barRef.current.style.transform = `scaleX(${progress})`;
     };
 
     handleScroll();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <div
-      className="fixed top-[50svh] right-[2%] -translate-y-1/2 w-1.5 h-[100px] rounded-full bg-background-light overflow-hidden z-[30] pointer-events-none"
+      className="fixed top-0 left-0 right-0 h-[2px] z-[60] pointer-events-none"
       aria-hidden="true"
     >
       <div
-        className="w-full bg-primary rounded-full h-full"
-        ref={scrollBarRef}
-      ></div>
+        ref={barRef}
+        className="h-full w-full bg-gradient-to-r from-sky-400 via-blue-500 to-sky-300 origin-left scale-x-0 transition-transform duration-75 ease-out"
+      />
     </div>
   );
 };

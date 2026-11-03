@@ -904,17 +904,19 @@ export function ProjectCoverVisual({
   className,
   imageClassName,
   compact = false,
+  showSchematic = false,
 }: {
   project: Project;
   index?: number;
   className?: string;
   imageClassName?: string;
   compact?: boolean;
+  showSchematic?: boolean;
 }) {
   const [imageError, setImageError] = useState(false);
   const formattedIndex = String(index + 1).padStart(2, "0");
 
-  if (project.image && !imageError) {
+  if (project.image && !imageError && !showSchematic) {
     return (
       <div
         className={cn(
@@ -941,40 +943,39 @@ export function ProjectCoverVisual({
   return (
     <div
       className={cn(
-        "relative w-full h-full overflow-hidden bg-surface-elevated select-none",
+        "relative w-full min-h-[300px] overflow-hidden bg-[#0d1324] rounded-xl border border-white/[0.08] select-none",
         className
       )}
     >
       <div
         className={cn(
-          "absolute inset-0 flex flex-col justify-between bg-gradient-to-br from-surface via-surface-elevated to-background p-4 sm:p-5 text-foreground transition-transform duration-500 ease-editorial",
-          project.accentColor || "from-indigo-500/10 via-surface to-background",
+          "flex flex-col justify-between p-4 sm:p-6 text-foreground",
           imageClassName
         )}
       >
         {/* Top Meta Bar */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-2 text-xs font-mono text-muted-foreground">
-          <span className="flex items-center gap-1.5 font-semibold text-foreground">
-            <span className="h-2 w-2 rounded-full bg-cyan-400" />
-            <span>Project {formattedIndex}</span>
+        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 text-xs font-mono text-slate-400">
+          <span className="flex items-center gap-1.5 font-semibold text-slate-200">
+            <span className="size-2 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
+            <span>Architecture Diagram &middot; Project {formattedIndex}</span>
           </span>
-          <span className="truncate max-w-[65%] text-muted-foreground font-medium">
+          <span className="truncate max-w-[65%] text-slate-400 font-medium">
             {project.category}
           </span>
         </div>
 
         {/* Center Architecture Diagram */}
-        <div className="my-auto flex items-center justify-center py-1">
+        <div className="my-6 flex items-center justify-center py-2 overflow-x-auto">
           <SchematicIllustration slug={project.slug} />
         </div>
 
         {/* Bottom Tech Bar */}
         {!compact && (
-          <div className="flex items-center justify-between border-t border-white/10 pt-2 text-xs font-mono text-muted-foreground">
-            <span className="truncate max-w-[78%] text-cyan-400 font-semibold">
+          <div className="flex items-center justify-between border-t border-white/[0.08] pt-3 text-xs font-mono text-slate-400">
+            <span className="truncate max-w-[78%] text-sky-400 font-medium">
               {project.techStack.slice(0, 4).join(" · ")}
             </span>
-            <span className="text-foreground font-medium">{project.year}</span>
+            <span className="text-slate-300 font-medium">{project.year}</span>
           </div>
         )}
       </div>

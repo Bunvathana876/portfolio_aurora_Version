@@ -3,6 +3,7 @@ import React from 'react';
 export interface LanyardProps {
   frontImage?: string;
   backImage?: string;
+  qrImage?: string;
   imageFit?: 'cover' | 'contain';
   cardColor?: string;
   orientation?: 'portrait' | 'landscape';
@@ -12,6 +13,7 @@ export interface LanyardProps {
   anchor?: 'left' | 'center' | 'right';
   strapLength?: number;
   strapImage?: string;
+  strapLabel?: string;
   strapColor?: string;
   strapWidth?: number;
   metal?: 'graphite' | 'silver' | 'gold';

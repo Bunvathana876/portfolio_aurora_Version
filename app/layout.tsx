@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, Roboto_Flex } from "next/font/google";
+import { Inter, JetBrains_Mono, Geist } from "next/font/google";
 import { ReactLenis } from "lenis/react";
 
 import "lenis/dist/lenis.css";
@@ -7,26 +7,22 @@ import "./globals.css";
 import { siteData } from "@/data/site";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/sections/Footer";
-import { Preloader } from "@/components/ui/Preloader";
 import { ScrollProgressIndicator } from "@/components/ui/ScrollProgressIndicator";
-import { AmbientCanvas } from "@/components/ui/AmbientCanvas";
-import { StickyEmail } from "@/components/ui/StickyEmail";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { ToastProvider } from "@/components/ui/Toast";
+import { cn } from "@/lib/utils";
 
-const antonFont = Anton({
-  weight: "400",
-  style: "normal",
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-anton",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const robotoFlex = Roboto_Flex({
-  weight: ["100", "400", "500", "600", "700", "800"],
-  style: "normal",
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-roboto-flex",
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -84,27 +80,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={cn("dark", "font-sans", geist.variable)}>
       <body
-        className={`${antonFont.variable} ${robotoFlex.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <ToastProvider>
           <ReactLenis
             root
             options={{
               lerp: 0.1,
-              duration: 1.4,
+              duration: 1.2,
             }}
           >
+            <ScrollProgressIndicator />
             <Navbar />
             <CommandPalette />
             <main className="relative z-[1]">{children}</main>
             <Footer />
-
-            <Preloader />
-            <ScrollProgressIndicator />
-            <AmbientCanvas />
-            <StickyEmail />
           </ReactLenis>
         </ToastProvider>
       </body>

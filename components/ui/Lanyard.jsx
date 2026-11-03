@@ -34,7 +34,7 @@ const FINISHES = {
 
 const BAND_COLUMNS = [0, 0.07, 0.93, 1];
 const BAND_BEND = [-0.95, -0.28, 0.28, 0.95];
-const FLIP_SPIN = 9;
+const FLIP_SPIN = 5.5;
 
 const FOIL_VERTEX_HEAD = `
 varying vec2 vFoilUv;
@@ -432,15 +432,279 @@ const paintFace = (canvas, image, color, fit) => {
   if (image) drawFitted(ctx, image, canvas.width, canvas.height, fit);
 };
 
-const paintStrap = (canvas, image, color) => {
+// Keep the existing portrait artwork while replacing its small printed copy.
+const paintIdentityFace = (canvas, image, color, fit) => {
+  paintFace(canvas, image, color, fit);
+  if (!image) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const unit = canvas.width / 1024;
+  const h = canvas.height / unit;
+  ctx.save();
+  ctx.scale(unit, unit);
+
+  // Header & Footer dark background panels (matching slate-900 / obsidian tokens)
+  ctx.fillStyle = '#0B1120';
+  ctx.fillRect(0, 0, 1024, 265);
+  ctx.fillRect(0, 865, 1024, h - 865);
+
+  // Top Sky-400 accent indicator bar
+  ctx.fillStyle = '#38BDF8';
+  ctx.fillRect(0, 0, 1024, 7);
+
+  // Glowing status LED
+  ctx.shadowColor = '#38BDF8';
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = '#38BDF8';
+  ctx.beginPath();
+  ctx.arc(104, 115, 6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Header Title
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#F8FAFC';
+  ctx.font = '700 28px "JetBrains Mono", ui-monospace, monospace';
+  ctx.fillText('DEVELOPER PASS', 126, 124);
+
+  // ID Badge Pill (top right)
+  ctx.fillStyle = 'rgba(56, 189, 248, 0.1)';
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.roundRect(740, 96, 180, 42, 10);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#38BDF8';
+  ctx.font = '700 22px "JetBrains Mono", ui-monospace, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ID: BV-2026', 830, 124);
+
+  // Header divider
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillRect(104, 165, 816, 1.5);
+
+  // University details
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#E2E8F0';
+  ctx.font = '700 30px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('NORTON UNIVERSITY', 104, 218);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#94A3B8';
+  ctx.font = '600 22px "JetBrains Mono", monospace';
+  ctx.fillText('2023 – 2026', 920, 218);
+
+  // Portrait frame borders
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillRect(104, 265, 816, 1.5);
+  ctx.fillRect(104, 865, 816, 1.5);
+
+  // Name & Role below portrait
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#F8FAFC';
+  ctx.font = '800 64px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('BUN VATHANA', 104, 955);
+
+  ctx.fillStyle = '#38BDF8';
+  ctx.font = '700 28px "JetBrains Mono", monospace';
+  ctx.fillText('SOFTWARE DEVELOPER', 104, 1010);
+
+  // Divider line
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillRect(104, 1045, 816, 1.5);
+
+  // Tech Badges (Flutter · Dart, Next.js · TS, FastAPI · Python)
+  const badges = ['Flutter · Dart', 'Next.js · React', 'FastAPI · Python'];
+  const badgeWidth = 260;
+  const badgeHeight = 46;
+  const badgeSpacing = 18;
+  const startX = 104;
+  const startY = 1072;
+
+  badges.forEach((badge, index) => {
+    const bx = startX + index * (badgeWidth + badgeSpacing);
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.07)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(bx, startY, badgeWidth, badgeHeight, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#CBD5E1';
+    ctx.font = '600 21px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(badge, bx + badgeWidth / 2, startY + 30);
+  });
+
+  // Specialization description
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#94A3B8';
+  ctx.font = '500 24px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Cross-Platform Mobile  ·  Full-Stack Web  ·  REST APIs', 104, 1165);
+
+  // Footer divider
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillRect(104, h - 170, 816, 1.5);
+
+  // Footer metadata
+  ctx.fillStyle = '#64748B';
+  ctx.font = '600 22px "JetBrains Mono", monospace';
+  ctx.fillText('DEPARTMENT OF CS', 104, h - 105);
+  ctx.textAlign = 'right';
+  ctx.fillText('PHNOM PENH, KH', 920, h - 105);
+
+  ctx.restore();
+};
+
+// Draw the contact side at texture resolution so the QR stays crisp and unmirrored when flipped.
+const paintContactFace = (canvas, qrImage) => {
+  const ctx = canvas.getContext('2d');
+  if (!ctx || !qrImage) return;
+  const { width, height } = canvas;
+  const unit = width / 1024;
+  ctx.save();
+  ctx.scale(unit, unit);
+  const h = height / unit;
+
+  // Dark slate background matching portfolio tokens
+  ctx.fillStyle = '#0B1120';
+  ctx.fillRect(0, 0, 1024, h);
+
+  // Top Sky-400 accent indicator bar
+  ctx.fillStyle = '#38BDF8';
+  ctx.fillRect(0, 0, 1024, 7);
+
+  // Header LED indicator and channel title
+  ctx.shadowColor = '#38BDF8';
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = '#38BDF8';
+  ctx.beginPath();
+  ctx.arc(104, 115, 6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#F8FAFC';
+  ctx.font = '700 28px "JetBrains Mono", ui-monospace, monospace';
+  ctx.fillText('DIRECT CONTACT', 126, 124);
+
+  // Available Status Pill (top right)
+  ctx.fillStyle = 'rgba(56, 189, 248, 0.1)';
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.roundRect(700, 96, 220, 42, 10);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#38BDF8';
+  ctx.font = '700 20px "JetBrains Mono", ui-monospace, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('STATUS: ONLINE', 810, 124);
+
+  // Header divider
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillRect(104, 165, 816, 1.5);
+
+  // Subtitle
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#94A3B8';
+  ctx.font = '500 24px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Instant messaging & technical consultation', 104, 210);
+
+  // Clean White Quiet-Zone QR Card (square aspect ratio, prominent, rounded)
+  const qrCardSize = 620;
+  const qrCardX = (1024 - qrCardSize) / 2;
+  const qrCardY = 245;
+
+  // Subtle outer cyan glow behind white card
+  ctx.shadowColor = 'rgba(56, 189, 248, 0.25)';
+  ctx.shadowBlur = 32;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.beginPath();
+  ctx.roundRect(qrCardX, qrCardY, qrCardSize, qrCardSize, 32);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Thin card border
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Draw QR code with quiet-zone padding, clipping out the 4px outer dark artifact in telegram-qr.jpg
+  // telegram-qr.jpg is 539x537 with white box at (4, 2, 532, 532)
+  const qrPadding = 32;
+  const qrInnerSize = qrCardSize - qrPadding * 2;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(
+    qrImage,
+    4,
+    2,
+    532,
+    532,
+    qrCardX + qrPadding,
+    qrCardY + qrPadding,
+    qrInnerSize,
+    qrInnerSize
+  );
+
+  // Labels below QR Code
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#38BDF8';
+  ctx.font = '800 26px "JetBrains Mono", ui-monospace, monospace';
+  ctx.fillText('SCAN TO CONNECT', 512, 925);
+
+  ctx.fillStyle = '#F8FAFC';
+  ctx.font = '800 46px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('TELEGRAM', 512, 985);
+
+  ctx.fillStyle = '#94A3B8';
+  ctx.font = '500 24px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Direct connection · Available for opportunities', 512, 1032);
+
+  // Footer divider line
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillRect(104, h - 210, 816, 1.5);
+
+  // Profile Identity Footer
+  ctx.fillStyle = '#F8FAFC';
+  ctx.font = '800 36px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('BUN VATHANA', 512, h - 145);
+
+  ctx.fillStyle = '#94A3B8';
+  ctx.font = '500 24px "JetBrains Mono", ui-monospace, monospace';
+  ctx.fillText('SOFTWARE DEVELOPER · PHNOM PENH, KH', 512, h - 95);
+
+  ctx.restore();
+};
+
+const paintStrap = (canvas, image, color, label) => {
   const across = 192;
-  const along = image ? Math.max(64, Math.round((image.width / image.height) * across)) : across * 2;
+  const along = label ? 640 : image ? Math.max(64, Math.round((image.width / image.height) * across)) : across * 2;
   canvas.width = across;
   canvas.height = along;
   const ctx = canvas.getContext('2d');
   if (!ctx) return along / across;
   ctx.fillStyle = toCss(color);
   ctx.fillRect(0, 0, across, along);
+  if (label) {
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+    ctx.fillRect(8, 0, 3, along);
+    ctx.fillRect(across - 11, 0, 3, along);
+    ctx.fillStyle = '#38BDF8';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '700 28px "JetBrains Mono", monospace';
+    for (const y of [160, 480]) {
+      ctx.save();
+      ctx.translate(across / 2, y);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillText(label, 0, 0);
+      ctx.restore();
+    }
+    return along / across;
+  }
   if (image) {
     ctx.save();
     ctx.translate(across, 0);
@@ -705,6 +969,7 @@ const stepSimulation = (sim, dt, physics, time) => {
 const Lanyard = ({
   frontImage,
   backImage,
+  qrImage,
   imageFit = 'cover',
   cardColor = '#ffffff',
   orientation = 'portrait',
@@ -714,6 +979,7 @@ const Lanyard = ({
   anchor = 'center',
   strapLength = 0.5,
   strapImage,
+  strapLabel,
   strapColor = '#111111',
   strapWidth = 0.65,
   metal = 'silver',
@@ -733,6 +999,7 @@ const Lanyard = ({
   settingsRef.current = {
     frontImage,
     backImage,
+    qrImage,
     imageFit: imageFit === 'contain' ? 'contain' : 'cover',
     cardColor,
     orientation: orientation === 'landscape' ? 'landscape' : 'portrait',
@@ -742,6 +1009,7 @@ const Lanyard = ({
     anchor,
     strapLength,
     strapImage,
+    strapLabel,
     strapColor,
     strapWidth,
     metal,
@@ -896,8 +1164,9 @@ const Lanyard = ({
         frontTexture.dispose();
         backTexture.dispose();
       }
-      paintFace(frontCanvas, images.front, color, s.imageFit);
-      paintFace(backCanvas, images.back || images.front, color, s.imageFit);
+      paintIdentityFace(frontCanvas, images.front, color, s.imageFit);
+      if (images.qr) paintContactFace(backCanvas, images.qr);
+      else paintFace(backCanvas, images.back || images.front, color, s.imageFit);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
       start();
@@ -905,7 +1174,7 @@ const Lanyard = ({
 
     const repaintStrap = () => {
       const s = settingsRef.current;
-      tileRatio = paintStrap(strapCanvas, images.strap, parseColor(s.strapColor, [0.07, 0.07, 0.07]));
+      tileRatio = paintStrap(strapCanvas, images.strap, parseColor(s.strapColor, [0.07, 0.07, 0.07]), s.strapLabel);
       weave.repeat.set(2, 2 * tileRatio);
       strapTexture.dispose();
       strapTexture.needsUpdate = true;
@@ -966,25 +1235,27 @@ const Lanyard = ({
         }
       }
 
-      const imageKey = `${s.frontImage}|${s.backImage}|${s.strapImage}`;
+      const imageKey = `${s.frontImage}|${s.backImage}|${s.strapImage}|${s.qrImage}`;
       if (imageKey !== applied.imageKey) {
         const token = ++imageToken;
         Promise.all([
           loadImage(imageCache, s.frontImage),
           loadImage(imageCache, s.backImage),
-          loadImage(imageCache, s.strapImage)
-        ]).then(([front, back, strap]) => {
+          loadImage(imageCache, s.strapImage),
+          loadImage(imageCache, s.qrImage)
+        ]).then(([front, back, strap, qr]) => {
           if (!alive || token !== imageToken) return;
           images.front = front;
           images.back = back;
           images.strap = strap;
+          images.qr = qr;
           paintFaces();
           repaintStrap();
         });
       }
       const faceKey = `${layoutKey}|${s.cardColor}|${s.imageFit}`;
       if (faceKey !== applied.faceKey) paintFaces();
-      if (s.strapColor !== applied.strapColor) repaintStrap();
+      if (s.strapColor !== applied.strapColor || s.strapLabel !== applied.strapLabel) repaintStrap();
 
       const finish = FINISHES[s.finish] || FINISHES.glossy;
       const card = parseColor(s.cardColor, [1, 1, 1]);
@@ -1012,7 +1283,7 @@ const Lanyard = ({
       }
       canvas.style.touchAction = s.interactive ? 'pan-y' : 'auto';
 
-      applied = { layoutKey, framingKey, imageKey, faceKey, strapColor: s.strapColor, strapScale };
+      applied = { layoutKey, framingKey, imageKey, faceKey, strapColor: s.strapColor, strapLabel: s.strapLabel, strapScale };
       start();
     };
 
@@ -1121,8 +1392,8 @@ const Lanyard = ({
         spinAir: 0.03,
         nodeDrag: 2,
         nodeAir: 0.2,
-        twist: 30,
-        twistDamping: 3,
+        twist: 32,
+        twistDamping: 6,
         grip: 40,
         gripDamping: 6,
         breeze: reducedMotion ? 0 : clamp(s.breeze, 0, 1)

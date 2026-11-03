@@ -34,7 +34,7 @@ const config: Config = {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
-          hover: "#a5b4fc",
+          hover: "#60a5fa",
         },
         muted: {
           DEFAULT: "hsl(var(--muted-foreground))",
@@ -42,8 +42,9 @@ const config: Config = {
           bg: "hsl(var(--muted))",
         },
         accent: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+          strong: "hsl(var(--accent-strong))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -68,12 +69,11 @@ const config: Config = {
         card: "16px",
       },
       fontFamily: {
-        anton: ["var(--font-anton)", "sans-serif"],
-        "roboto-flex": ["var(--font-roboto-flex)", "sans-serif"],
-        sans: ["var(--font-roboto-flex)", "system-ui", "sans-serif"],
-        serif: ["var(--font-anton)", "sans-serif"],
-        display: ["var(--font-anton)", "sans-serif"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        inter: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-inter)", "system-ui", "sans-serif"],
         mono: [
+          "var(--font-mono)",
           "ui-monospace",
           "SFMono-Regular",
           "Menlo",
@@ -82,6 +82,9 @@ const config: Config = {
           "Liberation Mono",
           "monospace",
         ],
+        // Backward-compatible mappings so existing components render clean modern typography
+        anton: ["var(--font-inter)", "system-ui", "sans-serif"],
+        "roboto-flex": ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       padding: {
         section: "250px",
@@ -101,10 +104,10 @@ const config: Config = {
         xs: "420px",
       },
       boxShadow: {
-        bento: "0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px hsl(var(--border))",
+        bento: "0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px var(--border-subtle)",
         "bento-hover":
           "0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px -5px var(--border-glow)",
-        glow: "0 0 25px -5px hsl(var(--primary))",
+        glow: "0 0 25px -5px rgba(56, 189, 248, 0.3)",
       },
       transitionTimingFunction: {
         editorial: "cubic-bezier(0.16, 1, 0.3, 1)",
