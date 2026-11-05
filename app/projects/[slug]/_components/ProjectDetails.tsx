@@ -244,7 +244,7 @@ export function ProjectDetails({ project, projectIndex }: Props) {
                     <div className="relative grow w-full rounded-[1.5rem] overflow-hidden bg-slate-900">
                       <Image
                         src={project.image}
-                        alt={`${project.title} Interface`}
+                        alt={`Concept illustration for ${project.title}`}
                         fill
                         priority
                         sizes="(max-width: 640px) 240px, 280px"
@@ -278,7 +278,7 @@ export function ProjectDetails({ project, projectIndex }: Props) {
                     <span className="size-2.5 rounded-full bg-emerald-500/70" />
                   </div>
                   <span className="text-[11px] font-mono text-slate-400">
-                    admin.shoppanda.bunvathana.dev
+                    Mobile app + admin dashboard
                   </span>
                   <span className="inline-flex items-center gap-1 text-[11px] font-mono text-indigo-400">
                     <Layers size={13} />
@@ -290,7 +290,7 @@ export function ProjectDetails({ project, projectIndex }: Props) {
                 <div className="relative w-full aspect-[16/10] overflow-hidden">
                   <Image
                     src={project.image}
-                    alt={`${project.title} Admin Portal`}
+                    alt={`Concept illustration for ${project.title}`}
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 960px"
@@ -324,9 +324,7 @@ export function ProjectDetails({ project, projectIndex }: Props) {
                     <span className="size-2.5 rounded-full bg-emerald-500/70" />
                   </div>
                   <span className="text-[11px] font-mono text-slate-400">
-                    {project.slug === "sunflower-expert-system"
-                      ? "sunflower-diagnostic.bunvathana.dev"
-                      : "tea-pos.bunvathana.dev"}
+                    {project.title}
                   </span>
                   <span className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-400">
                     <Monitor size={13} />
@@ -336,7 +334,7 @@ export function ProjectDetails({ project, projectIndex }: Props) {
                 <div className="relative w-full aspect-[16/10] overflow-hidden">
                   <Image
                     src={project.image}
-                    alt={`${project.title} Interface`}
+                    alt={`Concept illustration for ${project.title}`}
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 960px"

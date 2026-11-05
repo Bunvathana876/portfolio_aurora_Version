@@ -29,6 +29,7 @@ export function Experience() {
 
   useGSAP(
     () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       gsap.fromTo(
         ".experience-item",
         { opacity: 0, y: 30 },
@@ -50,22 +51,19 @@ export function Experience() {
   );
 
   return (
-    <section className="py-24 md:py-32 relative" id="my-experience" ref={containerRef}>
-      <div id="experience" className="sr-only" aria-hidden="true" />
+    <section className="py-24 md:py-32 relative" id="experience" ref={containerRef}>
+      <div id="my-experience" className="sr-only" aria-hidden="true" />
       <div className="container">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 md:mb-16">
           <div className="space-y-3">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/25 text-xs font-mono font-bold text-cyan-400 tracking-wider uppercase">
               <Sparkles size={12} className="animate-pulse" />
-              <span>03 / Career &amp; Academia</span>
+              <span>04 / Experience &amp; Education</span>
             </span>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-anton uppercase tracking-tight text-foreground">
               Experience &amp; Education
             </h2>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-2xl leading-relaxed">
-              My academic foundation in software development at Norton University alongside hands-on application engineering across mobile, web, and distributed systems.
-            </p>
           </div>
 
           {/* Filter Pills */}
@@ -191,19 +189,6 @@ export function Experience() {
                     {item.description}
                   </p>
 
-                  {/* Highlights / Skills */}
-                  {item.highlights && item.highlights.length > 0 && (
-                    <div className="mt-5 pt-4 border-t border-white/5 flex flex-wrap gap-2">
-                      {item.highlights.map((h, hIdx) => (
-                        <span
-                          key={hIdx}
-                          className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/5 text-xs font-mono text-foreground/90 group-hover:border-cyan-400/20 transition-all"
-                        >
-                          {h}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </SpotlightCard>
               </div>
             );

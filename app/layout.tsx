@@ -90,6 +90,7 @@ export default function RootLayout({
             options={{
               lerp: 0.1,
               duration: 1.2,
+              anchors: true,
             }}
           >
             <ScrollProgressIndicator />

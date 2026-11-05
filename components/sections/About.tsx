@@ -29,17 +29,17 @@ export function About() {
         <ScrollReveal duration={0.5} yOffset={16} className="max-w-3xl mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-mono font-medium text-sky-400">
             <span className="size-1.5 rounded-full bg-sky-400" />
-            <span>01 // ABOUT ME</span>
+            <span>01 / ABOUT</span>
           </div>
 
           <SectionAccentStroke />
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100 leading-tight">
-            Engineering purposeful software with clean code and modern architecture.
+            About
           </h2>
 
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed pt-1">
-            Senior software development student at Norton University with a strong foundation in cross-platform mobile systems and full-stack web platforms.
+            I study Software Development at Norton University and build mobile and web applications. My work spans Flutter, React, Next.js, and FastAPI.
           </p>
         </ScrollReveal>
 
@@ -82,9 +82,6 @@ export function About() {
                     {siteData.education.institution} &middot; {siteData.education.period}
                   </p>
                 </div>
-                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
-                  Core coursework in cross-platform mobile systems, relational database modeling, algorithms, and software architecture.
-                </p>
               </SpotlightCard>
             </ScrollRevealItem>
 
@@ -109,9 +106,6 @@ export function About() {
                     Flutter, React &middot; Next.js &middot; FastAPI
                   </p>
                 </div>
-                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
-                  Designing offline-first mobile apps using SQLite, paired with responsive web dashboards and typed Python/Node REST services.
-                </p>
               </SpotlightCard>
             </ScrollRevealItem>
 
@@ -136,9 +130,6 @@ export function About() {
                     Strict Typing &middot; Docker &middot; Modularity
                   </p>
                 </div>
-                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
-                  Emphasizing decoupled state management, reusable component structures, containerized environments, and reproducible builds.
-                </p>
               </SpotlightCard>
             </ScrollRevealItem>
 
@@ -160,12 +151,9 @@ export function About() {
                     Phnom Penh, Cambodia
                   </h4>
                   <p className="text-xs text-slate-400 font-mono mt-1">
-                    Khmer (Native) &bull; English (Working)
+                    Khmer (Native) &bull; English (Intermediate)
                   </p>
                 </div>
-                <p className="mt-4 pt-3 border-t border-white/[0.05] text-xs text-slate-400 leading-relaxed">
-                  Tuol Kouk district. Available for engineering roles locally in Cambodia and international remote collaboration.
-                </p>
               </SpotlightCard>
             </ScrollRevealItem>
           </ScrollReveal>

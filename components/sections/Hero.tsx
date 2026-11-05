@@ -15,10 +15,8 @@ import {
   Copy,
   FileDown,
   Github,
-  GraduationCap,
   Linkedin,
   MapPin,
-  Smartphone,
 } from "lucide-react";
 import { siteData } from "@/data/site";
 import { useToast } from "@/components/ui/Toast";
@@ -66,8 +64,6 @@ export function Hero() {
   // Layered depth transforms
   const portraitDepthX = useTransform(smoothMouseX, (v) => v * 0.7);
   const portraitDepthY = useTransform(smoothMouseY, (v) => v * 0.7);
-  const badgeDepthX = useTransform(smoothMouseX, (v) => v * 1.6);
-  const badgeDepthY = useTransform(smoothMouseY, (v) => v * 1.6);
   const orbitalDepthX = useTransform(smoothMouseX, (v) => v * -0.5);
   const orbitalDepthY = useTransform(smoothMouseY, (v) => v * -0.5);
 
@@ -208,7 +204,7 @@ export function Hero() {
               className="w-full text-slate-100"
             >
               <span className="sr-only">Software Developer</span>
-              <div className="w-full h-[72px] sm:h-[95px] lg:h-[115px] relative -ml-1 sm:-ml-2">
+              <span className="block w-full h-[72px] sm:h-[95px] lg:h-[115px] relative -ml-1 sm:-ml-2" aria-hidden="true">
                 <TechText
                   text="Software Developer"
                   align="left"
@@ -228,7 +224,7 @@ export function Hero() {
                   speed={0.8}
                   guides={false}
                 />
-              </div>
+              </span>
             </motion.h1>
 
             {/* Concise Professional Bio */}
@@ -236,25 +232,7 @@ export function Hero() {
               variants={itemVariants}
               className="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed"
             >
-              Hi, I&apos;m{" "}
-              <span className="font-semibold text-slate-200">
-                {siteData.name}
-              </span>
-              . A Software Developer and senior student pursuing a{" "}
-              <span className="text-slate-200 font-medium">
-                B.S. in Software Development
-              </span>{" "}
-              at{" "}
-              <span className="text-slate-200 font-medium">
-                Norton University (2023–2026)
-              </span>
-              . I specialize in cross-platform mobile engineering with{" "}
-              <span className="text-sky-400 font-medium">Flutter &amp; Dart</span>{" "}
-              and robust full-stack web systems with{" "}
-              <span className="text-sky-300 font-medium">
-                React, Next.js, and FastAPI
-              </span>
-              .
+              I&apos;m {siteData.name}, a software developer building Flutter apps and full-stack web experiences with Next.js and FastAPI.
             </motion.p>
 
             {/* Primary Actions with Magnetic CTA Buttons */}
@@ -470,50 +448,6 @@ export function Hero() {
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]"
               />
-
-              {/* Floating Discipline Badge (Top Right) with Multi-Plane Depth */}
-              <motion.div
-                style={{
-                  ...floatingStyle,
-                  x: badgeDepthX,
-                  y: badgeDepthY,
-                }}
-                className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#090D16]/90 backdrop-blur-md border border-white/[0.08] shadow-lg pointer-events-none animate-float"
-              >
-                <div className="flex size-6 items-center justify-center rounded-md bg-sky-500/15 border border-sky-400/30 text-sky-400">
-                  <Smartphone size={12} />
-                </div>
-                <div>
-                  <p className="text-[11px] font-mono font-semibold text-slate-200 leading-tight">
-                    Flutter &middot; Dart
-                  </p>
-                  <p className="text-[10px] font-mono text-slate-400 leading-tight">
-                    Cross-Platform Mobile
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Floating Academic Credential Badge (Bottom Left) with Multi-Plane Depth */}
-              <motion.div
-                style={{
-                  ...floatingStyle,
-                  x: badgeDepthX,
-                  y: badgeDepthY,
-                }}
-                className="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#090D16]/90 backdrop-blur-md border border-white/[0.08] shadow-lg pointer-events-none animate-float-delayed"
-              >
-                <div className="flex size-6 items-center justify-center rounded-md bg-emerald-500/15 border border-emerald-400/30 text-emerald-400">
-                  <GraduationCap size={12} />
-                </div>
-                <div>
-                  <p className="text-[11px] font-mono font-semibold text-slate-200 leading-tight">
-                    Norton University
-                  </p>
-                  <p className="text-[10px] font-mono text-slate-400 leading-tight">
-                    B.S. Software Dev &middot; 2026
-                  </p>
-                </div>
-              </motion.div>
 
               {/* Optimized Portrait Silhouette with Soft Edge Fade Mask */}
               <div

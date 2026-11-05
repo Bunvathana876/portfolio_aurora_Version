@@ -23,9 +23,7 @@ export function Footer() {
             <span className="text-xl sm:text-2xl font-anton text-foreground tracking-wider block">
               {siteData.name.toUpperCase()}
             </span>
-            <p className="text-xs font-mono text-muted-foreground mt-1">
-              Software Developer &middot; Norton University (2023–2026) &middot; Phnom Penh, Cambodia
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Software Developer · Phnom Penh</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -69,11 +67,7 @@ export function Footer() {
         </div>
 
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-muted-foreground/80">
-          <p>&copy; {year} {siteData.name}. All rights reserved.</p>
-          <p className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-            <span>Built with Next.js 15, TypeScript &amp; Tailwind CSS</span>
-          </p>
+          <p>&copy; {year} {siteData.name}</p>
         </div>
       </div>
     </footer>

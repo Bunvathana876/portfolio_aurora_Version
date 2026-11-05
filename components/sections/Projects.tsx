@@ -22,6 +22,16 @@ function DeviceMockup({ project }: { project: Project }) {
   const isDual = project.platformType === "dual";
   const isDailyFlow = project.slug === "daily-flow";
 
+  if (isDailyFlow) {
+    return (
+      <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.08] bg-[#0d1324] text-center">
+        <Smartphone size={32} className="text-sky-400" aria-hidden="true" />
+        <span className="text-lg font-semibold text-slate-100">Daily Flow</span>
+        <span className="text-sm text-slate-400">App screenshot unavailable</span>
+      </div>
+    );
+  }
+
   // 1. Mobile Flutter Application (Realistic Mobile Device Frame)
   if (isMobile) {
     return (
@@ -125,7 +135,7 @@ function DeviceMockup({ project }: { project: Project }) {
           </div>
 
           <div className="px-3 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-[10px] font-mono text-slate-400 truncate max-w-[200px]">
-            admin.shoppanda.bunvathana.dev
+            Mobile app + admin dashboard
           </div>
 
           <div className="flex items-center gap-1.5 text-xs font-mono text-indigo-400">
@@ -138,7 +148,7 @@ function DeviceMockup({ project }: { project: Project }) {
         <div className="relative grow w-full overflow-hidden bg-slate-950">
           <Image
             src={project.image}
-            alt={`${project.title} Admin Console`}
+            alt={`Concept illustration for ${project.title}`}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.035]"
@@ -176,9 +186,7 @@ function DeviceMockup({ project }: { project: Project }) {
         </div>
 
         <div className="px-3 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-[10px] font-mono text-slate-400 truncate max-w-[220px]">
-          {project.slug === "sunflower-expert-system"
-            ? "sunflower-diagnostic.bunvathana.dev"
-            : "tea-pos.bunvathana.dev"}
+          {project.title}
         </div>
 
         <div className="flex items-center gap-1 text-slate-400">
@@ -191,7 +199,7 @@ function DeviceMockup({ project }: { project: Project }) {
       <div className="relative grow w-full overflow-hidden bg-slate-950">
         <Image
           src={project.image}
-          alt={project.title}
+          alt={`Concept illustration for ${project.title}`}
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.035]"
@@ -225,12 +233,9 @@ export function Projects() {
           <SectionAccentStroke />
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100 leading-tight">
-            Featured Engineering Projects
+            Projects
           </h2>
 
-          <p className="text-slate-400 text-base sm:text-lg leading-relaxed pt-1">
-            Production-grade mobile applications with Flutter, bilingual diagnostic expert systems, and containerized full-stack web platforms.
-          </p>
         </ScrollReveal>
 
         {/* 2-Column Responsive Project Grid with Perspective Tilt */}
@@ -312,12 +317,12 @@ export function Projects() {
 
                     {/* Concise Technical Description / Motivation */}
                     <p className="mt-3 text-sm text-slate-400 leading-relaxed line-clamp-3 [transform:translateZ(12px)] transition-transform duration-300">
-                      {project.motivation || project.description}
+                      {project.description}
                     </p>
 
                     {/* Technology Badges with 3D Depth */}
                     <div className="mt-5 flex flex-wrap gap-1.5 [transform:translateZ(14px)] transition-transform duration-300">
-                      {project.techStack.map((tech) => (
+                      {project.techStack.slice(0, 4).map((tech) => (
                         <span
                           key={tech}
                           className="px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[11px] font-mono text-slate-300 group-hover:border-sky-400/20 transition-all"
@@ -330,9 +335,7 @@ export function Projects() {
 
                   {/* Card Bottom Action Bar with 3D Depth */}
                   <div className="mt-8 pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-4 [transform:translateZ(16px)] transition-transform duration-300">
-                    <span className="text-xs font-mono text-sky-400/90 bg-sky-500/10 border border-sky-400/20 px-2.5 py-1 rounded-md">
-                      {project.metrics || "Production Ready"}
-                    </span>
+                    <span className="text-xs text-slate-400">{project.role}</span>
 
                     <div className="flex items-center gap-3">
                       {project.githubUrl && (
@@ -340,9 +343,9 @@ export function Projects() {
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label={`GitHub repository for ${project.title}`}
+                          aria-label={`GitHub profile for ${project.title}`}
                           className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-sky-400/40 text-slate-400 hover:text-white active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all"
-                          title="GitHub Repository"
+                          title="GitHub Profile"
                         >
                           <Github size={15} />
                         </a>

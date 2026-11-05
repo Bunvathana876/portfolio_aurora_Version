@@ -70,7 +70,7 @@ export function CommandPalette() {
     {
       id: "experience",
       num: "04",
-      label: "Experience & Milestones",
+      label: "Experience & Education",
       category: "Index",
       action: () => jumpTo("#experience"),
     },

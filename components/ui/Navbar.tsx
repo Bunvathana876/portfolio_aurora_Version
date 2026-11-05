@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,7 +18,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "About", href: "/#about", id: "about" },
   { label: "Skills", href: "/#skills", id: "skills" },
   { label: "Projects", href: "/#projects", id: "projects" },
-  { label: "Experience", href: "/#experience", id: "experience" },
+  { label: "Experience & Education", href: "/#experience", id: "experience" },
   { label: "Contact", href: "/#contact", id: "contact" },
 ];
 
@@ -26,76 +26,98 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  // Active section observer on the homepage
+  // Select the last section whose start has passed a viewport probe.
+  // This stays deterministic when two tall sections share the viewport.
   useEffect(() => {
     if (pathname !== "/") {
       setActiveSection("");
       return;
     }
 
-    const sectionElements: { id: string; element: HTMLElement }[] = [];
-    const sectionIds = [
-      { id: "about", targets: ["about", "about-me"] },
-      { id: "skills", targets: ["skills", "my-stack"] },
-      { id: "projects", targets: ["projects", "selected-projects"] },
-      { id: "experience", targets: ["experience", "my-experience"] },
-      { id: "contact", targets: ["contact"] },
-    ];
+    const sections = NAV_ITEMS.map(({ id }) => ({
+      id,
+      element: document.getElementById(id),
+    })).filter((section): section is { id: string; element: HTMLElement } =>
+      section.element !== null
+    );
 
-    sectionIds.forEach(({ id, targets }) => {
-      for (const targetId of targets) {
-        const el = document.getElementById(targetId);
-        if (el) {
-          sectionElements.push({ id, element: el });
+    let frame = 0;
+    const updateActiveSection = () => {
+      frame = 0;
+      const navBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      const probe = Math.max(navBottom + 16, window.innerHeight * 0.35);
+      let current = "";
+
+      for (const section of sections) {
+        if (section.element.getBoundingClientRect().top <= probe) {
+          current = section.id;
+        } else {
           break;
         }
       }
-    });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const matched = sectionElements.find(
-              (item) => item.element === entry.target
-            );
-            if (matched) {
-              setActiveSection(matched.id);
-            }
-          }
-        });
-      },
-      {
-        rootMargin: "-25% 0px -65% 0px",
-        threshold: 0,
+      const pageBottom = document.documentElement.scrollHeight - window.innerHeight;
+      if (sections.length > 0 && window.scrollY >= pageBottom - 2) {
+        current = sections[sections.length - 1].id;
       }
-    );
+      setActiveSection(current);
+    };
 
-    sectionElements.forEach((item) => observer.observe(item.element));
+    const scheduleUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("hashchange", scheduleUpdate);
+    window.addEventListener("popstate", scheduleUpdate);
+    window.addEventListener("load", scheduleUpdate);
 
     return () => {
-      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("hashchange", scheduleUpdate);
+      window.removeEventListener("popstate", scheduleUpdate);
+      window.removeEventListener("load", scheduleUpdate);
     };
   }, [pathname]);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!isMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
     };
   }, [isMenuOpen]);
 
-  // Close mobile menu on Escape key
+  // Keep keyboard focus inside the open menu and restore it on Escape.
   useEffect(() => {
+    if (!isMenuOpen) return;
+    const menu = mobileMenuRef.current;
+    menu?.querySelector<HTMLAnchorElement>("a")?.focus();
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isMenuOpen) {
+      if (e.key === "Escape") {
         setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+      } else if (e.key === "Tab" && menu) {
+        const items = Array.from(menu.querySelectorAll<HTMLElement>("a, button"));
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -114,7 +136,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-3 sm:pt-4 pointer-events-none">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-3 sm:pt-4 pointer-events-none">
       <nav
         aria-label="Primary"
         className="max-w-5xl mx-auto pointer-events-auto flex items-center justify-between px-4 sm:px-5 py-2.5 rounded-full bg-[#090D16]/85 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.45)] transition-all"
@@ -134,13 +156,14 @@ export function Navbar() {
         </Link>
 
         {/* Center: Desktop Navigation Links with Animated Sliding Indicator */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-1">
           {NAV_ITEMS.map((item) => {
             const isActive = activeSection === item.id;
             return (
               <a
                 key={item.id}
                 href={item.href}
+                aria-current={isActive ? "location" : undefined}
                 className={cn(
                   "relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors duration-200 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none",
                   isActive
@@ -188,11 +211,12 @@ export function Navbar() {
 
           {/* Mobile Menu Toggle Button */}
           <button
+            ref={menuButtonRef}
             type="button"
             aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden flex size-8 items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.06] active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all cursor-pointer"
+            className="lg:hidden flex size-8 items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.06] active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none transition-all cursor-pointer"
           >
             {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -209,13 +233,16 @@ export function Navbar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm pointer-events-auto"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                setIsMenuOpen(false);
+                menuButtonRef.current?.focus();
+              }}
               aria-hidden="true"
             />
 
             <motion.div
-              role="dialog"
-              aria-modal="true"
+              ref={mobileMenuRef}
+              role="navigation"
               aria-label="Mobile navigation"
               initial={{ opacity: 0, y: -14, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -230,6 +257,7 @@ export function Navbar() {
                     <a
                       key={item.id}
                       href={item.href}
+                      aria-current={isActive ? "location" : undefined}
                       onClick={handleNavClick}
                       className={cn(
                         "px-4 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-[0.98]",

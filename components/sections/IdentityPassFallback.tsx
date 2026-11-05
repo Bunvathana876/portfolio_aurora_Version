@@ -28,7 +28,7 @@ export function IdentityPassFallback() {
           </span>
         </div>
         <span className="font-mono text-[11px] text-sky-400/90 bg-sky-500/10 border border-sky-400/20 px-2 py-0.5 rounded-md">
-          ID: BV-2026
+          BV
         </span>
       </div>
 
@@ -54,32 +54,6 @@ export function IdentityPassFallback() {
           <p className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
             <GraduationCap size={13} className="text-slate-400 shrink-0" />
             <span className="truncate">Norton University (2023–2026)</span>
-          </p>
-        </div>
-      </div>
-
-      {/* Bio snippet */}
-      <p className="mt-5 text-sm text-slate-400 leading-relaxed [transform:translateZ(12px)]">
-        Focused on architecting zero-latency offline-first mobile solutions and reliable RESTful API ecosystems backed by relational databases.
-      </p>
-
-      {/* Micro Attributes */}
-      <div className="mt-6 pt-5 border-t border-white/[0.08] grid grid-cols-2 gap-3 text-xs [transform:translateZ(14px)]">
-        <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-          <p className="font-mono text-[10px] text-slate-400 uppercase tracking-wider">
-            Specialization
-          </p>
-          <p className="font-medium text-slate-200 mt-0.5">
-            Mobile &amp; Full-Stack
-          </p>
-        </div>
-
-        <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-          <p className="font-mono text-[10px] text-slate-400 uppercase tracking-wider">
-            Core Languages
-          </p>
-          <p className="font-medium text-slate-200 mt-0.5">
-            Dart, Python, JS/TS
           </p>
         </div>
       </div>

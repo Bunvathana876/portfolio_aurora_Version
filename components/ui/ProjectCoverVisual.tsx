@@ -926,7 +926,7 @@ export function ProjectCoverVisual({
       >
         <Image
           src={project.image}
-          alt={project.title}
+          alt={`Concept illustration for ${project.title}`}
           fill
           sizes="(max-width: 1024px) 100vw, 840px"
           className={cn(
